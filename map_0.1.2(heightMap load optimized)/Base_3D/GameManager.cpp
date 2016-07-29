@@ -100,7 +100,7 @@ void GameManager::Destroy()
 
 	TextureManager::Get().Destroy();
 	
-
+	SkinnedMeshManager::Get().Destroy();
 	//디바이스 릴리즈
 	ULONG result = 0;
 	result = SAFE_RELEASE(direct3dDevice);

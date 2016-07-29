@@ -17,7 +17,7 @@ public :
 	void Destroy();
 
 	static inline LPDIRECT3DTEXTURE9 GetTexture(const char* filename, D3DXIMAGE_INFO* imageInfo = nullptr){ return TextureManager::Get().GetInstanceTexture(filename, imageInfo); }
-
+	static inline LPDIRECT3DTEXTURE9 GetTexture(const char* path, const char* fileName) { return TextureManager::Get().GetInstanceTexture(path, fileName); }
 public:
 	const char* TEXTURE_DIRECTORY = "./Data/Texture/";
 	const char* TEXTURE_DIRECTORY1 = "./Data/Texture/terrain_alpine/";
@@ -29,5 +29,6 @@ public:
 	std::map<std::string, std::pair<LPDIRECT3DTEXTURE9, D3DXIMAGE_INFO>> textureDataMap;
 	LPDIRECT3DTEXTURE9 GetInstanceTexture(
 		const char* filename, D3DXIMAGE_INFO* imageInfo = nullptr);
+	LPDIRECT3DTEXTURE9 GetInstanceTexture(const char* path, const char* fileName);
 };
 

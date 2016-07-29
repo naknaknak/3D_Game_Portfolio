@@ -39,10 +39,19 @@ void GameState_HeightMap::Initialize()
 		girl->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
 		GameManager::GetCamera()->SetLookTarget(girl->GetPositionAdress());
 	}
+	if (goat == nullptr)
+	{
+		goat = new SkinnedMesh();
+		goat->Initialize("", "goat.X");
+		goat->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
+		goat->SetAnimationIndex(6);
+	}
+
 }
 
 void GameState_HeightMap::Destroy()
 {
+	SAFE_DELETE(goat);
 	SAFE_DELETE(girl);
 	SAFE_DELETE(heightMap);
 	SAFE_DELETE(grid);
@@ -64,6 +73,7 @@ void GameState_HeightMap::Update()
 		girl->Update();
 		girl->GroundCheck();
 	}
+	
 }
 
 void GameState_HeightMap::Render()
@@ -83,6 +93,10 @@ void GameState_HeightMap::Render()
 	if ( girl )
 	{
 		girl->Render();
+	}
+	if (goat)
+	{
+		goat->UpdateAndRender();
 	}
 	RECT rc = { 10, RESOLUTION_Y - 55, 11, 11 };
 	UI_Manager::GetFont()->DrawTextA(NULL, "GameState_HeightMap", strlen("GameState_HeightMap"), &rc, DT_TOP | DT_LEFT | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));

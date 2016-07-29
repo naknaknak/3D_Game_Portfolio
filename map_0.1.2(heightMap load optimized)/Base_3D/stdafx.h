@@ -19,6 +19,7 @@
 
 #include "FVF.h"
 #include "Triangle.h"
+#include "BoundingVolume.h"
 
 #include "RandomUtil.h"
 
@@ -32,6 +33,7 @@
 
 #include "GameStateManager.h"
 #include "GameManager.h"
+#include "SkinnedMeshManager.h"
 
 #pragma comment(lib, "winmm.lib")
 

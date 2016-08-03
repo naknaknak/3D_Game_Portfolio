@@ -192,6 +192,12 @@
     <ClCompile Include="AllocateHierarchy.cpp">
       <Filter>소스 파일\Object\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="SkinnedCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MemoryLeakCheck.h">
@@ -316,6 +322,12 @@
     </ClInclude>
     <ClInclude Include="BoundingVolume.h">
       <Filter>헤더 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

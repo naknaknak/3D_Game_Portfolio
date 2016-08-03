@@ -44,7 +44,7 @@ void GameState_HeightMap::Initialize()
 		goat = new SkinnedMesh();
 		goat->Initialize("", "goat.X");
 		goat->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
-		goat->SetAnimationIndex(6);
+		goat->SetAnimationIndex(0);
 	}
 
 }

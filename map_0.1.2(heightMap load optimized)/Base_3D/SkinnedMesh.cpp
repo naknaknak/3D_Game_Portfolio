@@ -124,13 +124,13 @@ void SkinnedMesh::Render(Bone* current)
 
 	// 각 프레임의 메시 컨테이너에 있는 pSkinInfo를 이용하여 영향받는 모든 
 	// 프레임의 매트릭스를 boneMatrixPointers에 연결한다.
-	if ( current->pMeshContainer )
+	if (current->pMeshContainer)
 	{
 		BoneMesh* boneMesh = (BoneMesh*)current->pMeshContainer;
 
 		// get bone combinations
 		LPD3DXBONECOMBINATION pBoneCombos =
-			(LPD3DXBONECOMBINATION)( boneMesh->bufferBoneCombos->GetBufferPointer() );
+			(LPD3DXBONECOMBINATION)(boneMesh->bufferBoneCombos->GetBufferPointer());
 
 		D3DXMATRIXA16 matViewProj, matView, matProj;
 		GameManager::GetDevice()->GetTransform(D3DTS_VIEW, &matView);
@@ -145,17 +145,17 @@ void SkinnedMesh::Render(Bone* current)
 
 		effect->SetFloat("alpha", alpha);
 		// for each palette
-		for ( DWORD dwAttrib = 0; dwAttrib < boneMesh->numAttrGroups; ++dwAttrib )
+		for (DWORD dwAttrib = 0; dwAttrib < boneMesh->numAttrGroups; ++dwAttrib)
 		{
 			// set each transform into the palette
-			for ( DWORD dwPalEntry = 0; dwPalEntry < boneMesh->numPaletteEntries; ++dwPalEntry )
+			for (DWORD dwPalEntry = 0; dwPalEntry < boneMesh->numPaletteEntries; ++dwPalEntry)
 			{
 				DWORD dwMatrixIndex = pBoneCombos[dwAttrib].BoneId[dwPalEntry];
-				if ( dwMatrixIndex != UINT_MAX )
+				if (dwMatrixIndex != UINT_MAX)
 				{
 					workingPalette[dwPalEntry] =
 						boneMesh->boneOffsetMatrices[dwMatrixIndex] *
-						( *boneMesh->boneMatrixPointers[dwMatrixIndex] );
+						(*boneMesh->boneMatrixPointers[dwMatrixIndex]);
 				}
 			}
 
@@ -171,7 +171,7 @@ void SkinnedMesh::Render(Bone* current)
 			effect->SetVector("vMaterialAmbient", &D3DXVECTOR4(0.53f, 0.53f, 0.53f, 0.53f));
 			effect->SetVector("vMaterialDiffuse", &D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
 
-			
+
 
 			// we're pretty much ignoring the materials we got from the x-file; just set
 			// the texture here
@@ -187,7 +187,7 @@ void SkinnedMesh::Render(Bone* current)
 
 			// run through each pass and draw
 			effect->Begin(&uiPasses, 0);
-			for ( uiPass = 0; uiPass < uiPasses; ++uiPass )
+			for (uiPass = 0; uiPass < uiPasses; ++uiPass)
 			{
 				effect->BeginPass(uiPass);
 				boneMesh->workingMesh->DrawSubset(dwAttrib);
@@ -198,15 +198,24 @@ void SkinnedMesh::Render(Bone* current)
 	}
 
 	//재귀적으로 모든 프레임(본)에 대해서 실행.
-	if ( current->pFrameSibling )
+	if (current->pFrameSibling)
 	{
 		Render((Bone*)current->pFrameSibling);
 	}
 
-	if ( current->pFrameFirstChild )
+	if (current->pFrameFirstChild)
 	{
 		Render((Bone*)current->pFrameFirstChild);
 	}
+	LPD3DXANIMATIONSET animset = nullptr;
+	animController->GetAnimationSet(0, &animset);
+	LPCSTR animName;
+	animset->GetAnimationNameByIndex(0, &animName);
+	int numanim = animset->GetNumAnimations();
+	RECT rc = { 15,50,16,51 };
+	UI_Manager::GetFont()->DrawTextA(nullptr, animName, strlen(animName),&rc,DT_LEFT | DT_NOCLIP,D3DCOLOR_XRGB(255,255,255));
+	SAFE_RELEASE(animset);
+	
 }
 
 void SkinnedMesh::SetAnimationIndex(int index)

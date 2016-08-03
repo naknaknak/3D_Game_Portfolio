@@ -100,8 +100,10 @@
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="ObjFileGroup.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="RandomUtil.cpp" />
+    <ClCompile Include="SkinnedCharacter.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SkinnedMeshManager.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -144,8 +146,10 @@
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjFileGroup.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="RandomUtil.h" />
+    <ClInclude Include="SkinnedCharacter.h" />
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SkinnedMeshManager.h" />
     <ClInclude Include="SkyBox.h" />

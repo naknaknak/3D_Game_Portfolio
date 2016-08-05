@@ -209,10 +209,10 @@ void SkinnedMesh::Render(Bone* current)
 		Render((Bone*)current->pFrameFirstChild);
 	}
 	LPD3DXANIMATIONSET animset = nullptr;
-	animController->GetAnimationSet(0, &animset);
+	animController->GetAnimationSetByName("Idle", &animset);
 	LPCSTR animName;
 	animName = animset->GetName();
-	double numanim = animController->GetTime();
+	double numanim = animset->GetPeriod();
 	std::string numstring;
 	numstring= std::to_string(numanim);
 	
@@ -244,6 +244,21 @@ void SkinnedMesh::SetAnimationName(const char *animationName)
 	LPD3DXANIMATIONSET animSet = nullptr;
 	animController->GetAnimationSetByName(animationName, &animSet);
 	animController->SetTrackAnimationSet(0, animSet);
+
+	SAFE_RELEASE(animSet);
+}
+void SkinnedMesh::SetAnimationName(const char *animationName, double * animationTime)
+{
+	//애니메이션 변경
+	if (!animController)
+		return;
+
+
+	LPD3DXANIMATIONSET animSet = nullptr;
+	animController->GetAnimationSetByName(animationName, &animSet);
+	animController->SetTrackAnimationSet(0, animSet);
+	
+	*animationTime = animSet->GetPeriod();
 	SAFE_RELEASE(animSet);
 }
 void SkinnedMesh::SetRandomTrackPosition()

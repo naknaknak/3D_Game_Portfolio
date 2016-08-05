@@ -15,6 +15,7 @@ public:
 
 	void SetAnimationIndex(int index);	// 재생 될 애니메이션 세팅
 	void SetAnimationName(const char *animationName);
+	void SetAnimationName(const char * animationName, double *time);
 	void SetRandomTrackPosition();		// 테스트용(애니메이션 재생 위치를 랜덤하게 세팅)
 
 
@@ -37,6 +38,8 @@ protected:
 	D3DXVECTOR3 position = D3DXVECTOR3(0,0,0);
 	D3DXVECTOR3 scaleFactor = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
 	int currentAnimationIndex = 0;
+	double selectedAnimationLength = 0.0f;
+	double currentAnimationTime = 0.0f;
 
 	// 클론 된건지 원본인지 표시용
 	bool isClone = false;

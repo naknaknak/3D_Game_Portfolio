@@ -43,9 +43,10 @@ void GameState_HeightMap::Initialize()
 	{
 		goat = new Player();
 		goat->Initialize("", "goat.X");
+		goat->InitializeAnimation();
 		goat->SetPosition(D3DXVECTOR3(20.0f, 7.0f, -212.5f));
 		goat->SetHeightMap(heightMap);
-		goat->SetAnimationIndex(0);
+		goat->ChangePlayerState(PlayerState::PLAYER_IDLE);
 		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
 	}
 

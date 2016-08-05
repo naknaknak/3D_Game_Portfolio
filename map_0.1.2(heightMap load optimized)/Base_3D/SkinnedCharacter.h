@@ -25,12 +25,12 @@ public:
 	inline void SetHeightMap(HeightMap* inputMap) { hm = inputMap; }
 	virtual void ChangeCharaterState(CharacterState state) = 0;
 	virtual void UpdateAndRender() = 0;
-
+	virtual void InitializeAnimation()=0;
 
 
 protected:
 	
 	HeightMap* hm = nullptr;
-	
+	std::map<CharacterState,std::string> animationNames;
 };
 

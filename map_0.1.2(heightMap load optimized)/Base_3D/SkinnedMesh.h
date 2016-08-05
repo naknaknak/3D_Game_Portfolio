@@ -14,6 +14,7 @@ public:
 	void UpdateAndRender();
 
 	void SetAnimationIndex(int index);	// 재생 될 애니메이션 세팅
+	void SetAnimationName(const char *animationName);
 	void SetRandomTrackPosition();		// 테스트용(애니메이션 재생 위치를 랜덤하게 세팅)
 
 
@@ -22,18 +23,20 @@ public:
 	inline void SetPosition(D3DXVECTOR3 v){	position = v; boundingSphere.center = v; }	
 	inline BoundingSphere* GetBoundingSphere() { return &boundingSphere;	}
 	inline D3DXVECTOR3 GetPositon() { return position; }
-private:
+protected:
 	// 하나만 생성(원본과 공유)
 	Bone* rootFrame = nullptr;
 	DWORD workingPaletteSize = 0;
 	D3DXMATRIX* workingPalette = nullptr;
 	LPD3DXEFFECT effect = nullptr;
 	BoundingSphere boundingSphere = BoundingSphere();
+	BoundingBox boundingBox = BoundingBox();
 
 	// 객체마다 가지고 있어야 할 것
 	LPD3DXANIMATIONCONTROLLER animController = nullptr;
 	D3DXVECTOR3 position = D3DXVECTOR3(0,0,0);
 	D3DXVECTOR3 scaleFactor = D3DXVECTOR3(0.01f, 0.01f, 0.01f);
+	int currentAnimationIndex = 0;
 
 	// 클론 된건지 원본인지 표시용
 	bool isClone = false;

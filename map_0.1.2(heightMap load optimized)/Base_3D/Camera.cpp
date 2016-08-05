@@ -105,3 +105,10 @@ LRESULT Camera::CameraInputProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 	return 0;
 }
+D3DXVECTOR3 Camera::GetCameraDirectionXZ()
+{
+	D3DXVECTOR3 lookingDirection = lookAt - eyePosition;
+	lookingDirection.y = 0;
+	D3DXVec3Normalize(&lookingDirection, &lookingDirection);
+	return lookingDirection;
+}

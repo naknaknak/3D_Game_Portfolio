@@ -4,7 +4,7 @@
 #include "HeightMap.h"
 #include "Character_HeightMapMove.h"
 #include "SkyBox.h"
-#include "SkinnedMesh.h"
+#include "Player.h"
 
 class GameState_HeightMap :
 	public GameState
@@ -29,6 +29,6 @@ protected:
 	HeightMap* heightMap = nullptr;
 	Character_HeightMapMove* girl = nullptr;
 	SkyBox* sky = nullptr;
-	SkinnedMesh* goat = nullptr;
+	Player* goat = nullptr;
 };
 

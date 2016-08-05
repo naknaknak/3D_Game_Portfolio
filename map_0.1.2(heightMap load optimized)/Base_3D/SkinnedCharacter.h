@@ -20,12 +20,17 @@ public:
 	SkinnedCharacter();
 	virtual ~SkinnedCharacter();
 
+	inline D3DXVECTOR3 GetPosition() { return position; }
+	inline D3DXVECTOR3* GetPositionAddress(){ return &position; }
 	inline void SetHeightMap(HeightMap* inputMap) { hm = inputMap; }
 	virtual void ChangeCharaterState(CharacterState state) = 0;
+	virtual void UpdateAndRender() = 0;
+
+
 
 protected:
 	
 	HeightMap* hm = nullptr;
-	virtual void Update(D3DXMATRIXA16 * local) = 0;
+	
 };
 

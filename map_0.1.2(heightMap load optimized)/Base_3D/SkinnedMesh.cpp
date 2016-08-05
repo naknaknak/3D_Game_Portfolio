@@ -31,6 +31,7 @@ void SkinnedMesh::Initialize(char* path, char* fileName)
 		&animController);
 
 	isClone = true;
+	
 }
 
 void SkinnedMesh::Destroy()
@@ -210,10 +211,13 @@ void SkinnedMesh::Render(Bone* current)
 	LPD3DXANIMATIONSET animset = nullptr;
 	animController->GetAnimationSet(0, &animset);
 	LPCSTR animName;
-	animset->GetAnimationNameByIndex(0, &animName);
-	int numanim = animset->GetNumAnimations();
+	animName = animset->GetName();
+	double numanim = animController->GetTime();
+	std::string numstring;
+	numstring= std::to_string(numanim);
+	
 	RECT rc = { 15,50,16,51 };
-	UI_Manager::GetFont()->DrawTextA(nullptr, animName, strlen(animName),&rc,DT_LEFT | DT_NOCLIP,D3DCOLOR_XRGB(255,255,255));
+	UI_Manager::GetFont()->DrawTextA(nullptr, numstring.c_str(), numstring.length(),&rc,DT_LEFT | DT_NOCLIP,D3DCOLOR_XRGB(255,255,255));
 	SAFE_RELEASE(animset);
 	
 }
@@ -223,13 +227,25 @@ void SkinnedMesh::SetAnimationIndex(int index)
 	//애니메이션 변경
 	if ( !animController )
 		return;
+	currentAnimationIndex = index;
 
 	LPD3DXANIMATIONSET animSet = nullptr;
 	animController->GetAnimationSet(index, &animSet);
 	animController->SetTrackAnimationSet(0, animSet);
 	SAFE_RELEASE(animSet);
 }
+void SkinnedMesh::SetAnimationName(const char *animationName)
+{
+	//애니메이션 변경
+	if (!animController)
+		return;
+	
 
+	LPD3DXANIMATIONSET animSet = nullptr;
+	animController->GetAnimationSetByName(animationName, &animSet);
+	animController->SetTrackAnimationSet(0, animSet);
+	SAFE_RELEASE(animSet);
+}
 void SkinnedMesh::SetRandomTrackPosition()
 {
 	//랜덤으로  애니메이션 시작점 조절

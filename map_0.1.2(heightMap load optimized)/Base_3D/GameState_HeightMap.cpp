@@ -30,21 +30,23 @@ void GameState_HeightMap::Initialize()
 		heightMap = new HeightMap;
 		heightMap->Initialize("field_.raw", "field_0.png", 8);
 	}
-	if ( girl == nullptr )
-	{
-		girl = new Character_HeightMapMove();
-		girl->Initialize();
-		girl->SetHeightMap(heightMap);
-		//girl->SetPosition(D3DXVECTOR3(5.f, 10.0f, -5.f));
-		girl->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
-		GameManager::GetCamera()->SetLookTarget(girl->GetPositionAdress());
-	}
+	//if ( girl == nullptr )
+	//{
+	//	girl = new Character_HeightMapMove();
+	//	girl->Initialize();
+	//	girl->SetHeightMap(heightMap);
+	//	//girl->SetPosition(D3DXVECTOR3(5.f, 10.0f, -5.f));
+	//	girl->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
+	//	GameManager::GetCamera()->SetLookTarget(girl->GetPositionAdress());
+	//}
 	if (goat == nullptr)
 	{
-		goat = new SkinnedMesh();
+		goat = new Player();
 		goat->Initialize("", "goat.X");
-		goat->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
+		goat->SetPosition(D3DXVECTOR3(20.0f, 7.0f, -212.5f));
+		goat->SetHeightMap(heightMap);
 		goat->SetAnimationIndex(0);
+		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
 	}
 
 }
@@ -52,7 +54,7 @@ void GameState_HeightMap::Initialize()
 void GameState_HeightMap::Destroy()
 {
 	SAFE_DELETE(goat);
-	SAFE_DELETE(girl);
+	/*SAFE_DELETE(girl);*/
 	SAFE_DELETE(heightMap);
 	SAFE_DELETE(grid);
 	SAFE_DELETE(sky);
@@ -70,8 +72,8 @@ void GameState_HeightMap::Update()
 	}
 	if ( girl )
 	{
-		girl->Update();
-		girl->GroundCheck();
+		//girl->Update();
+		//girl->GroundCheck();
 	}
 	
 }

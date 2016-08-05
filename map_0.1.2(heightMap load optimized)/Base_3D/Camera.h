@@ -13,6 +13,8 @@ public:
 
 	LRESULT CameraInputProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+	D3DXVECTOR3 GetCameraDirectionXZ(); 
+
 	inline void SetLookTarget(D3DXVECTOR3* target){ lookTarget = target; }
 	inline void SetDistance(float distance){ camDistance = distance; }
 	inline void SetRotateX(float rotation){ camRotX = rotation; }

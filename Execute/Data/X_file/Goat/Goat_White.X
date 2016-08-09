@@ -151,7 +151,7 @@ Material Goat_Mat_01 {
  0.000000;0.000000;0.000000;;
 
  TextureFilename {
-  "Goat_Dif_01.tga";
+  "Goat_Dif_02.tga";
  }
 }
 

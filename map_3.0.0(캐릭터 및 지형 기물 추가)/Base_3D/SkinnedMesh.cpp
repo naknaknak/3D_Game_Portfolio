@@ -297,8 +297,7 @@ void SkinnedMesh::Load(char* path, char* fileName)
 	ah.SetDirectory(path);
 	ah.SetDefaultPaletteSize(paletteSize);
 
-	boundingSphere.center = (ah.GetMin( ) + ah.GetMax( )) / 2.0f;
-	boundingSphere.radius = D3DXVec3Length(&(ah.GetMin( ) - ah.GetMax( )));
+	
 
 	char fullPath[512];
 	strcpy_s(fullPath, path);
@@ -311,6 +310,11 @@ void SkinnedMesh::Load(char* path, char* fileName)
 		NULL,
 		(LPD3DXFRAME*)&rootFrame,
 		&animController);
+
+	boundingSphere.center = (ah.GetMin() + ah.GetMax()) / 2.0f;
+	boundingSphere.radius = D3DXVec3Length(&(ah.GetMin() - ah.GetMax()));
+	boundingBox.min = ah.GetMin();
+	boundingBox.max = ah.GetMax();
 
 	if (workingPalette)
 		delete[] workingPalette;

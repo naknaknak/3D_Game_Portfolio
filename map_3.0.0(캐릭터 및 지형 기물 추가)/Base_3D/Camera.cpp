@@ -46,7 +46,11 @@ void Camera::Update()
 		lookAt = (*lookTarget);
 		eyePosition = (*lookTarget) + eyePosition;
 	}
-	
+
+	lookingDirection = eyePosition;
+	lookingDirection.y = 0;
+	D3DXVec3Normalize(&lookingDirection, &lookingDirection);
+
 	D3DXMATRIXA16 matView;
 	D3DXMatrixLookAtLH(&matView, &eyePosition, &lookAt, &upVector);
 	GameManager::GetDevice()->SetTransform(D3DTS_VIEW, &matView);
@@ -104,11 +108,4 @@ LRESULT Camera::CameraInputProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	}
 
 	return 0;
-}
-D3DXVECTOR3 Camera::GetCameraDirectionXZ()
-{
-	D3DXVECTOR3 lookingDirection = lookAt - eyePosition;
-	lookingDirection.y = 0;
-	D3DXVec3Normalize(&lookingDirection, &lookingDirection);
-	return lookingDirection;
 }

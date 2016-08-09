@@ -130,14 +130,14 @@ void GameManager::Update()
 		fpsCount = 0;
 		fpsTimeCheck = 0.0f;
 	}
-
+	
 	//GameState 업데이트
 	GameStateManager::Get().Update();
-
 	if (camera)
 	{
 		camera->Update();
 	}
+	
 
 	UI_Manager::Get().Update();
 

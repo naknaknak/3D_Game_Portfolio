@@ -64,7 +64,7 @@ void GameState_HeightMap::Initialize()
  		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
 	}
 
-	if (zombie == nullptr)
+	/*if (zombie == nullptr)
 	{
 		zombie = new Player( );
 		zombie->Initialize("Zombie/", "zombie_attack02_bite.X");
@@ -74,7 +74,7 @@ void GameState_HeightMap::Initialize()
 		zombie->SetHeightMap(heightMap);
 		zombie->SetAnimationIndex(0);
 		GameManager::GetCamera( )->SetLookTarget(goat->GetPositionAddress( ));
-	}
+	}*/
 	
 }
 

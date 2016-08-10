@@ -12,7 +12,7 @@ public:
 
 	virtual void UpdateAndRender();
 	void Debuging( );
-	virtual void InitializeAnimation() override;
+	
 
 	virtual void ChangeCharacterState(CharacterState state) override;
 	//void ChangePlayerState(PlayerState state);

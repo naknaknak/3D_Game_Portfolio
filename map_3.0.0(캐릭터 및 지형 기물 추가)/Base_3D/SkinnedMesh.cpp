@@ -274,11 +274,12 @@ void SkinnedMesh::SetAnimationName(const char *animationName, double * animation
 	LPD3DXANIMATIONSET animSet = nullptr;
 	animController->GetAnimationSetByName(animationName, &animSet);
 	animController->SetTrackAnimationSet(0, animSet);
-
-	*animationTime = animSet->GetPeriod( );
-	animPeriod = (float)*animationTime;
-	animName = (char*)animSet->GetName( );
-	SAFE_RELEASE(animSet);
+	if (animSet) {
+		*animationTime = animSet->GetPeriod();
+		animPeriod = (float)*animationTime;
+		animName = (char*)animSet->GetName();
+		SAFE_RELEASE(animSet);
+	}
 }
 void SkinnedMesh::SetRandomTrackPosition( )
 {

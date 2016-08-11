@@ -23,13 +23,7 @@ void Player::Destroy( )
 	//}
 }
 
-void Player::InitializeAnimation()
-{
-	animationNames[CharacterState::CHARACTER_IDLE] = "Idle";
-	animationNames[CharacterState::CHARACTER_MOVE] = "Run";
-	animationNames[CharacterState::CHARACTER_ATTACK] = "Baa";
 
-}
 
 void Player::UpdateAndRender()
 {
@@ -51,7 +45,7 @@ void Player::UpdateAndRender()
 
 
 	D3DXVec3Cross(&right, &direction, &up);
-	rotationAngle += D3DX_PI;
+	
 	D3DXMatrixRotationY(&rotation, rotationAngle);
 	
 	switch (currentState)
@@ -67,41 +61,47 @@ void Player::UpdateAndRender()
 			if ((GetAsyncKeyState('W') & 0x8000) != 0)
 			{
 				pos -= (-direction * moveSpeed * tick);
-				//SetAnimationName("Run");
-
+				if (currentState == CharacterState::CHARACTER_IDLE)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_MOVE);
+				}
 				move = true;
 			}
 			else if ((GetAsyncKeyState('S') & 0x8000) != 0)
 			{
 				pos += (-direction * moveSpeed * tick);
-				
+				if (currentState == CharacterState::CHARACTER_IDLE)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_MOVE);
+				}
 
 				move = true;
 			}
 			if ((GetAsyncKeyState('A') & 0x8000) != 0)
 			{
 				pos -= (-right * moveSpeed * tick);
-				
+				if (currentState == CharacterState::CHARACTER_IDLE)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_MOVE);
+				}
+
 
 				move = true;
 			}
 			else if ((GetAsyncKeyState('D') & 0x8000) != 0)
 			{
 				pos += (-right * moveSpeed * tick);
-				
+				if (currentState == CharacterState::CHARACTER_IDLE)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_MOVE);
+				}
 
 				move = true;
 			}
 			
-			if (!move)
+			if ((!move) && currentState==CharacterState::CHARACTER_MOVE)
 			{
-				currentState = CharacterState::CHARACTER_IDLE;
-				SetAnimationName("Idle");
-			}
-			else
-			{
-				currentState = CharacterState::CHARACTER_MOVE;
-				SetAnimationName("Run");
+				ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 			}
 			//state transition
 			if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0)
@@ -129,7 +129,8 @@ void Player::UpdateAndRender()
 	{
 		double tick = GameManager::GetTick();
 		currentAnimationTime += tick;
-		skill1Sphere.radius = sinf((float)currentAnimationTime * D3DX_PI) * (float)maxSkill1Radius;
+		skill1Sphere.radius = sinf(currentAnimationTime*D3DX_PI)*maxSkill1Radius;
+		animController->SetTrackSpeed(0, selectedAnimationLength / skillCastingTime);
 		if (currentAnimationTime >= skillCastingTime)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
@@ -152,7 +153,7 @@ void Player::UpdateAndRender()
 		D3DXMATRIXA16 local;
 		D3DXMatrixTranslation(&local, position.x, position.y, position.z);
 		D3DXMATRIXA16 scale;
-		D3DXMatrixScaling(&scale, scaleFactor.x, scaleFactor.y, scaleFactor.z);
+		D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
 		local = scale*rotation*local;
 		Update(rootFrame, &local);
 		Render(rootFrame);
@@ -173,5 +174,6 @@ void Player::ChangeCharacterState(CharacterState state)
 	currentState = state;
 	SetAnimationName(animationNames[state].c_str(), &selectedAnimationLength);
 	animController->SetTrackPosition(0, 0.0f);
+	animController->SetTrackSpeed(0, 1.0f);
 	currentAnimationTime = 0.0f;
 }

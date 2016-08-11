@@ -27,7 +27,7 @@ public:
 
 	virtual void ChangeCharacterState(CharacterState state) = 0;
 	virtual void UpdateAndRender() = 0;
-	virtual void InitializeAnimation()=0;
+	virtual void InitializeAnimation();
 
 	inline D3DXVECTOR3 GetPosition() { return position; }
 	inline D3DXVECTOR3* GetPositionAddress(){ return &position; }

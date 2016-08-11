@@ -11,8 +11,10 @@ public:
 
 	void Initialize(char* path, char* fileName);	// 원하는 파일을 클로닝 하는 함수
 	virtual void Destroy();
-	void UpdateAndRender();
-
+	virtual void Update();
+	
+	virtual void Render();
+	
 	void Debuging( );
 
 	void SetAnimationIndex(int index);	// 재생 될 애니메이션 세팅
@@ -39,6 +41,7 @@ protected:
 	// 객체마다 가지고 있어야 할 것
 	LPD3DXANIMATIONCONTROLLER animController = nullptr;
 	D3DXVECTOR3 position = D3DXVECTOR3(0,0,0);
+	D3DXMATRIXA16 world;
 	float scaleFactor =0.05f;
 	int currentAnimationIndex = 0;
 	double selectedAnimationLength = 0.0f;
@@ -49,7 +52,7 @@ protected:
 	bool isClone = false;
 		
 	// 기타 내부적으로 필요한 함수들
-	void Update(Bone* current, D3DXMATRIXA16* parentMatrix);
+	void BoneUpdate(Bone* current, D3DXMATRIXA16* parentMatrix);
 	void Render(Bone* bone);
 	void SetupBoneMatrixPointers(Bone* bone);	//본 초기화
 

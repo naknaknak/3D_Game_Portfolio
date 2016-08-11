@@ -25,7 +25,7 @@ void Player::Destroy( )
 
 
 
-void Player::UpdateAndRender()
+void Player::Update()
 {
 	D3DXVECTOR3 pos = position;
 	D3DXVECTOR3 direction;
@@ -143,7 +143,7 @@ void Player::UpdateAndRender()
 		SetPosition(pos);
 	//여기부턴 skinnedmesh와 같음
 
-	if (animController)
+	/*if (animController)
 	{
 		animController->AdvanceTime(GameManager::GetTick(), nullptr);
 	}
@@ -157,7 +157,7 @@ void Player::UpdateAndRender()
 		local = scale*rotation*local;
 		Update(rootFrame, &local);
 		Render(rootFrame);
-	}
+	}*/
 	Debuging( );
 }
 void Player::Debuging( )

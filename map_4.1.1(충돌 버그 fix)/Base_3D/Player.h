@@ -10,7 +10,8 @@ public:
 	
 	virtual void Destroy( ) override;
 
-	virtual void UpdateAndRender();
+	virtual void Update() override;
+
 	void Debuging( );
 	
 

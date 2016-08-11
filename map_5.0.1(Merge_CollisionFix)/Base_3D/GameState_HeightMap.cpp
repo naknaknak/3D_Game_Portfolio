@@ -62,7 +62,7 @@ void GameState_HeightMap::Initialize()
  		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
 	}
 
-	if (zombie == nullptr)
+	/*if (zombie == nullptr)
 	{
 		zombie = new Player( );
 		zombie->Initialize("Zombie/", "zombie_attack02_bite.X");
@@ -72,7 +72,7 @@ void GameState_HeightMap::Initialize()
 		zombie->SetHeightMap(heightMap);
 		zombie->SetAnimationIndex(0);
 		GameManager::GetCamera( )->SetLookTarget(goat->GetPositionAddress( ));
-	}
+	}*/
 	
 }
 
@@ -108,7 +108,10 @@ void GameState_HeightMap::Update()
 		//girl->Update();
 		//girl->GroundCheck();
 	} 
-	
+	if (goat)
+	{
+		goat->Update();
+	}
 }
 
 void GameState_HeightMap::Render()
@@ -135,7 +138,7 @@ void GameState_HeightMap::Render()
 	}
 	if (goat)
 	{
-		goat->UpdateAndRender( );
+		goat->Render();
 		BoundingSphere goat_boundingSphere = *goat->GetBoundingSphere( );
 		std::vector<Tree*>& vTrees = trees->GetTrees( );
 		for (auto iter = vTrees.begin( ); iter != vTrees.end( ); ++iter)
@@ -153,10 +156,10 @@ void GameState_HeightMap::Render()
 			}
 		}
 	}
-	if (zombie)
+	/*if (zombie)
 	{
 		zombie->UpdateAndRender( );
-	}
+	}*/
 	if (trees)
 	{
 		trees->Render( );

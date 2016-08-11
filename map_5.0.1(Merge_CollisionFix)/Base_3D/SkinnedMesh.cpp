@@ -50,36 +50,20 @@ void SkinnedMesh::Destroy( )
 	// 이건 클론별로 다 따로 가지므로 일일이 삭제
 	SAFE_RELEASE(animController);
 }
-
-void SkinnedMesh::UpdateAndRender( )
+void SkinnedMesh::Update()
 {
-	//rootFrame을 공유하기 때문에 본 업데이트가 일어난 후 즉시 그리는 수 밖에 없다
-	if (animController)
-	{
-		animController->AdvanceTime(GameManager::GetTick( ), nullptr);
-	}
-
-	if (rootFrame)
-	{
-		D3DXMATRIXA16 local;
-		D3DXMatrixTranslation(&local, position.x, position.y, position.z);
-		D3DXMATRIXA16 scale;
-		D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
-		local = scale*local;
-		Update(rootFrame, &local);
-		Render(rootFrame);
-	}
-}
-
-void SkinnedMesh::Update(Bone* current, D3DXMATRIXA16* parentMatrix)
-{
+	D3DXMATRIXA16 translate;
+	D3DXMatrixTranslation(&translate, position.x, position.y, position.z);
+	D3DXMATRIXA16 scale;
+	D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
+	world = scale*translate;
 	if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0)
 	{
-		alpha += (float)GameManager::GetTick( ) * 0.01f;
+		alpha += (float)GameManager::GetTick() * 0.01f;
 	}
 	if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0)
 	{
-		alpha -= (float)GameManager::GetTick( ) * 0.01f;
+		alpha -= (float)GameManager::GetTick() * 0.01f;
 	}
 	if (alpha > 1.0f)
 	{
@@ -89,6 +73,26 @@ void SkinnedMesh::Update(Bone* current, D3DXMATRIXA16* parentMatrix)
 	{
 		alpha = 0.0f;
 	}
+}
+
+void SkinnedMesh::Render()
+{
+	//rootFrame을 공유하기 때문에 본 업데이트가 일어난 후 즉시 그리는 수 밖에 없다
+	if (animController)
+	{
+		animController->AdvanceTime(GameManager::GetTick( ), nullptr);
+	}
+
+	if (rootFrame)
+	{
+		BoneUpdate(rootFrame, &world);
+		Render(rootFrame);
+	}
+}
+
+void SkinnedMesh::BoneUpdate(Bone* current, D3DXMATRIXA16* parentMatrix)
+{
+
 	/*D3DXVECTOR3 pos = GetPosition();
 	if (hm->GetHeight(pos, pos.x, pos.z) == false)
 	{
@@ -112,12 +116,12 @@ void SkinnedMesh::Update(Bone* current, D3DXMATRIXA16* parentMatrix)
 
 	if (current->pFrameSibling)	//형제
 	{
-		Update((Bone*)current->pFrameSibling, parentMatrix);
+		BoneUpdate((Bone*)current->pFrameSibling, parentMatrix);
 	}
 
 	if (current->pFrameFirstChild)	//첫번째 자식
 	{
-		Update((Bone*)current->pFrameFirstChild, &(current->CombinedTransformationMatrix));
+		BoneUpdate((Bone*)current->pFrameFirstChild, &(current->CombinedTransformationMatrix));
 	}
 }
 

@@ -25,8 +25,12 @@ void Player::Destroy( )
 
 
 
-void Player::UpdateAndRender()
+void Player::Update()
 {
+	D3DXMATRIXA16 translate;
+	D3DXMatrixTranslation(&translate, position.x, position.y, position.z);
+	D3DXMATRIXA16 scale;
+	D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
 	D3DXVECTOR3 pos = position;
 	D3DXVECTOR3 direction;
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
@@ -47,7 +51,8 @@ void Player::UpdateAndRender()
 	D3DXVec3Cross(&right, &direction, &up);
 	
 	D3DXMatrixRotationY(&rotation, rotationAngle);
-	
+
+	world = scale*rotation*translate;
 	switch (currentState)
 	{
 		//Idle, Move만 특별한 State. changeState로 바꾸지 않는다.
@@ -140,10 +145,11 @@ void Player::UpdateAndRender()
 	default:
 		break;
 	}
-		SetPosition(pos);
+	SetPosition(pos);
+	
 	//여기부턴 skinnedmesh와 같음
 
-	if (animController)
+	/*if (animController)
 	{
 		animController->AdvanceTime(GameManager::GetTick(), nullptr);
 	}
@@ -155,9 +161,9 @@ void Player::UpdateAndRender()
 		D3DXMATRIXA16 scale;
 		D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
 		local = scale*rotation*local;
-		Update(rootFrame, &local);
+		BoneUpdate(rootFrame, &local);
 		Render(rootFrame);
-	}
+	}*/
 	Debuging( );
 }
 void Player::Debuging( )

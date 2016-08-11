@@ -147,6 +147,10 @@ void GameState_HeightMap::Render()
 
 				(*iter)->SetMaterialColor(D3DXCOLOR(0.f, 0.f, 0.8f, 1.0f));
 			}
+			else
+			{
+				(*iter)->SetMaterialColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
+			}
 		}
 	}
 	if (zombie)

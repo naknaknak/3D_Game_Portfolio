@@ -21,6 +21,8 @@ void SkinnedMesh::Initialize(char* path, char* fileName)
 	workingPalette = original->workingPalette;
 	effect = original->effect;
 	boundingSphere = original->boundingSphere;
+	boundingBox = original->boundingBox;
+	meshCenter = boundingSphere.center;
 
 	// 에니메이션은 따로 돌아야 하니 클론
 	original->animController->CloneAnimationController(
@@ -62,7 +64,7 @@ void SkinnedMesh::UpdateAndRender( )
 		D3DXMATRIXA16 local;
 		D3DXMatrixTranslation(&local, position.x, position.y, position.z);
 		D3DXMATRIXA16 scale;
-		D3DXMatrixScaling(&scale, scaleFactor.x, scaleFactor.y, scaleFactor.z);
+		D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
 		local = scale*local;
 		Update(rootFrame, &local);
 		Render(rootFrame);
@@ -274,11 +276,12 @@ void SkinnedMesh::SetAnimationName(const char *animationName, double * animation
 	LPD3DXANIMATIONSET animSet = nullptr;
 	animController->GetAnimationSetByName(animationName, &animSet);
 	animController->SetTrackAnimationSet(0, animSet);
-
-	*animationTime = animSet->GetPeriod( );
-	animPeriod = (float)*animationTime;
-	animName = (char*)animSet->GetName( );
-	SAFE_RELEASE(animSet);
+	if (animSet) {
+		*animationTime = animSet->GetPeriod();
+		animPeriod = (float)*animationTime;
+		animName = (char*)animSet->GetName();
+		SAFE_RELEASE(animSet);
+	}
 }
 void SkinnedMesh::SetRandomTrackPosition( )
 {
@@ -310,11 +313,15 @@ void SkinnedMesh::Load(char* path, char* fileName)
 		NULL,
 		(LPD3DXFRAME*)&rootFrame,
 		&animController);
+	D3DXVECTOR3 min=ah.GetMin();
+	D3DXVECTOR3 max=ah.GetMax();
+	min *= scaleFactor;
+	max *= scaleFactor;
 
-	boundingSphere.center = (ah.GetMin() + ah.GetMax()) / 2.0f;
-	boundingSphere.radius = D3DXVec3Length(&(ah.GetMin() - ah.GetMax()));
-	boundingBox.min = ah.GetMin();
-	boundingBox.max = ah.GetMax();
+	boundingSphere.center = (min + max) * 0.5f;
+	boundingSphere.radius = D3DXVec3Length(&(min - max));
+	boundingBox.min = min;
+	boundingBox.max = max;
 
 	if (workingPalette)
 		delete[] workingPalette;

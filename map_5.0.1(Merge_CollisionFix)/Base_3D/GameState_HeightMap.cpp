@@ -56,7 +56,8 @@ void GameState_HeightMap::Initialize()
 		goat->Initialize("Goat/", "Goat.X");
 		goat->InitializeAnimation();
 		goat->SetPosition(D3DXVECTOR3(193.0f, 12.0f, -306.0f));
-		
+		goat->SetTrees(trees->GetTrees());
+
 		goat->SetHeightMap(heightMap); 
 		goat->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
  		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
@@ -139,7 +140,7 @@ void GameState_HeightMap::Render()
 	if (goat)
 	{
 		goat->Render();
-		BoundingSphere goat_boundingSphere = *goat->GetBoundingSphere( );
+		/*BoundingSphere goat_boundingSphere = *goat->GetBoundingSphere( );
 		std::vector<Tree*>& vTrees = trees->GetTrees( );
 		for (auto iter = vTrees.begin( ); iter != vTrees.end( ); ++iter)
 		{
@@ -154,7 +155,7 @@ void GameState_HeightMap::Render()
 			{
 				(*iter)->SetBoundingSphereMaterialColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
 			}
-		}
+		}*/
 	}
 	/*if (zombie)
 	{

@@ -9,7 +9,7 @@ public:
 	SkinnedMesh();
 	~SkinnedMesh();
 
-	void Initialize(char* path, char* fileName);	// 원하는 파일을 클로닝 하는 함수
+	virtual void Initialize(char* path, char* fileName);	// 원하는 파일을 클로닝 하는 함수
 	virtual void Destroy();
 	virtual void Update();
 	

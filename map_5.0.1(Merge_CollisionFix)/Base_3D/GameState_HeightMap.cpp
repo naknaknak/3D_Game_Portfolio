@@ -54,7 +54,7 @@ void GameState_HeightMap::Initialize()
 	{
 		goat = new Player();
 		goat->Initialize("Goat/", "Goat.X");
-		goat->InitializeAnimation();
+		
 		goat->SetPosition(D3DXVECTOR3(193.0f, 12.0f, -306.0f));
 		goat->SetTrees(trees->GetTrees());
 

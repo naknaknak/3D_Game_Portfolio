@@ -37,7 +37,7 @@ protected:
 
 	Rocks_save* rock = nullptr;
 	Player* zombie = nullptr;
-	PlantTree* trees = nullptr	;
+	PlantTree* trees = nullptr;
 
 
 };

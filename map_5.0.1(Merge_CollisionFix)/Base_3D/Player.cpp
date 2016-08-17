@@ -30,10 +30,14 @@ void Player::Initialize(char* path, char* filename)
 	InitializeAnimation();
 	forwardBoundingSphere.center = boundingSphere.center;
 	forwardBoundingSphere.radius = boundingSphere.radius;
-
+	hp = 100;
 
 }
-
+void Player::InitializeCoolTime()
+{
+	cooltime.reserve((size_t)CharacterState::NUM_OF_CHARACTERSTATE);
+	cooltime[CharacterState::CHARACTER_ATTACK] = 0.7f;
+}
 void Player::Update()
 {
 	
@@ -50,25 +54,6 @@ void Player::Update()
 
 	world = scale*rotation*translate;
 	
-	
-	
-	//여기부턴 skinnedmesh와 같음
-
-	/*if (animController)
-	{
-		animController->AdvanceTime(GameManager::GetTick(), nullptr);
-	}
-
-	if (rootFrame)
-	{
-		D3DXMATRIXA16 local;
-		D3DXMatrixTranslation(&local, position.x, position.y, position.z);
-		D3DXMATRIXA16 scale;
-		D3DXMatrixScaling(&scale, scaleFactor, scaleFactor, scaleFactor);
-		local = scale*rotation*local;
-		BoneUpdate(rootFrame, &local);
-		Render(rootFrame);
-	}*/
 	Debuging( );
 }
 void Player::Debuging( )
@@ -117,10 +102,10 @@ void Player::ProcessState(CharacterState state)
 			bool move = false;
 			if ((GetAsyncKeyState('W') & 0x8000) != 0)
 			{
-				
+
 				pos -= (-direction * moveSpeed * tick);
 				forwardBoundingSphere.center = pos;
-				bool collision=false;
+				bool collision = false;
 				for (auto iter = trees.begin(); iter != trees.end(); ++iter)
 				{
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
@@ -129,7 +114,7 @@ void Player::ProcessState(CharacterState state)
 						pos = prevPos;
 						break;
 					}
-					
+
 				}
 				if (!collision) {
 					if (currentState == CharacterState::CHARACTER_IDLE)
@@ -207,9 +192,9 @@ void Player::ProcessState(CharacterState state)
 					}
 					move = true;
 				}
-				
+
 			}
-			
+
 
 			if ((!move) && currentState == CharacterState::CHARACTER_MOVE)
 			{
@@ -230,6 +215,40 @@ void Player::ProcessState(CharacterState state)
 			{
 				moveSpeed *= 2;
 				ChangeCharacterState(CharacterState::CHARACTER_SPRINT);
+			}
+			if ((GetAsyncKeyState('C') & 0x8000) != 0)
+			{
+				if ((GetAsyncKeyState('W') & 0x8000) != 0)
+				{
+					currentDodgeDirection = DodgeDirection::DODGE_FORWARD;
+				}
+				else	if ((GetAsyncKeyState('A') & 0x8000) != 0)
+				{
+					currentDodgeDirection = DodgeDirection::DODGE_LEFT;
+				}
+				else	if ((GetAsyncKeyState('S') & 0x8000) != 0)
+				{
+					currentDodgeDirection = DodgeDirection::DODGE_BACKWARD;
+				}
+				else	if ((GetAsyncKeyState('D') & 0x8000) != 0)
+				{
+					currentDodgeDirection = DodgeDirection::DODGE_RIGHT;
+				}
+				else currentDodgeDirection = DodgeDirection::DODGE_BACKWARD;
+
+				ChangeCharacterState(CharacterState::CHARACTER_DODGE);
+			}
+			if (isHit)
+			{
+				if (hp > 0)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_HIT);
+				}
+				else
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+				}
+			
 			}
 		}
 	}
@@ -258,6 +277,7 @@ void Player::ProcessState(CharacterState state)
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
 	}
+	break;
 	case CharacterState::CHARACTER_SPRINT:
 	{
 		if (hm->GetHeight(pos, pos.x, pos.z) != false)
@@ -298,7 +318,50 @@ void Player::ProcessState(CharacterState state)
 				ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 			}
 		}
+	
+	}
 	break;
+	case CharacterState::CHARACTER_HIT:
+		//wip
+	break;
+	case CharacterState::CHARACTER_DODGE:
+	{
+		float tick = (float)GameManager::GetTick();
+		currentAnimationTime += tick;
+		D3DXMATRIXA16 dodgeRot;
+		
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+		}
+		else
+		{
+			if (hm->GetHeight(pos, pos.x, pos.z) != false)
+			{
+				switch (currentDodgeDirection)
+				{
+				case DodgeDirection::DODGE_FORWARD:
+					pos += direction*dodgeSpeed*tick;
+					break;
+				case DodgeDirection::DODGE_BACKWARD:
+					pos -= direction*dodgeSpeed*tick;
+					break;
+				case DodgeDirection::DODGE_RIGHT:
+					D3DXMatrixRotationY(&dodgeRot, -currentAnimationTime * DODGE_ROTATION_FACTOR);
+					D3DXVec3TransformCoord(&right, &right, &dodgeRot);
+					pos += (-right * dodgeSpeed * tick);
+					break;
+				case DodgeDirection::DODGE_LEFT:
+					D3DXMatrixRotationY(&dodgeRot, currentAnimationTime * DODGE_ROTATION_FACTOR);
+					D3DXVec3TransformCoord(&right, &right, &dodgeRot);
+					pos -= (-right * dodgeSpeed * tick);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		break;
 	}
 	default:
 		break;

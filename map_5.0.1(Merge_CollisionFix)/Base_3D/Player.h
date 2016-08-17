@@ -1,6 +1,14 @@
 #pragma once
 #include "SkinnedCharacter.h"
 #include "Tree.h"
+enum DodgeDirection
+{
+	DODGE_FORWARD = 0,
+	DODGE_BACKWARD,
+	DODGE_LEFT,
+	DODGE_RIGHT
+
+};
 class Player :
 	public SkinnedCharacter
 {
@@ -21,6 +29,9 @@ public:
 	//void ChangePlayerState(PlayerState state);
 
 protected:
+	virtual void InitializeCoolTime() override;
+
+
 	D3DXVECTOR3 rotateAxis = D3DXVECTOR3(0, 1, 0);
 	float rotationAngle = 0.0f;
 	float moveSpeed = 20.0f;
@@ -31,7 +42,9 @@ protected:
 	BoundingSphere forwardBoundingSphere = BoundingSphere();
 
 	CharacterState currentState = CHARACTER_IDLE;
-
+	DodgeDirection currentDodgeDirection = DODGE_BACKWARD;
+	float dodgeSpeed = 30.0f;
+	static const int DODGE_ROTATION_FACTOR = 3;
 	//스킬
 	D3DXVECTOR3 skill1Pos = position;
 	BoundingSphere skill1Sphere = BoundingSphere();
@@ -41,7 +54,7 @@ protected:
 	//update의 파트를 나눔
 	
 	void ProcessState(CharacterState state);
-
+	
 
 	//충돌처리용 벡터
 	std::vector<SkinnedCharacter*> monsters;

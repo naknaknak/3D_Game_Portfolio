@@ -27,10 +27,11 @@ public:
 	
 
 	virtual void ChangeCharacterState(CharacterState state) override;
-	void SetTrees(std::vector<Tree*> inputTrees) { trees = inputTrees; }
 	
-	void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
+	inline void SetTrees(std::vector<Tree*> inputTrees) { trees = inputTrees; }
 	
+	inline void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
+	inline int* GetPlayerHP() { return &hp; }
 
 protected:
 	virtual void InitializeCoolTime() override;

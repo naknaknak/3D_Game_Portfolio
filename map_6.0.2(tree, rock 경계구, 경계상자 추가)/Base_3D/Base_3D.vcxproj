@@ -79,9 +79,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="AllocateHierarchy.cpp" />
     <ClCompile Include="AseFrame.cpp" />
     <ClCompile Include="AseLoader.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Character_HeightMapMove.cpp" />
@@ -99,6 +101,8 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Minion.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="ObjFileGroup.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
@@ -127,10 +131,12 @@
     <ClCompile Include="UI_Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIController.h" />
     <ClInclude Include="AllocateHierarchy.h" />
     <ClInclude Include="Asciitok.h" />
     <ClInclude Include="AseFrame.h" />
     <ClInclude Include="AseLoader.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="BoundingVolume.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
@@ -152,6 +158,8 @@
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="MaterialTexture.h" />
     <ClInclude Include="MemoryLeakCheck.h" />
+    <ClInclude Include="Minion.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjFileGroup.h" />
     <ClInclude Include="ObjLoader.h" />

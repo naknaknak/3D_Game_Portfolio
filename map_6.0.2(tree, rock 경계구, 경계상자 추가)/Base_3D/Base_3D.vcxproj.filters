@@ -240,6 +240,18 @@
     <ClCompile Include="Rock_location.cpp">
       <Filter>소스 파일\Object\Field</Filter>
     </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>소스 파일\Framework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>소스 파일\Object\X_File</Filter>
+    </ClCompile>
+    <ClCompile Include="Minion.cpp">
+      <Filter>소스 파일\Object\X_File</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Object\X_File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -391,6 +403,18 @@
     </ClInclude>
     <ClInclude Include="Rock_location.h">
       <Filter>헤더 파일\Object\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>헤더 파일\Framework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일\Framework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>헤더 파일\Framework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Minion.h">
+      <Filter>헤더 파일\Framework\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

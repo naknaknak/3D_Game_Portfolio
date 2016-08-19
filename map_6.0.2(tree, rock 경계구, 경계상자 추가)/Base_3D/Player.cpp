@@ -338,7 +338,7 @@ void Player::ProcessState(CharacterState state)
 		float tick = (float)GameManager::GetTick();
 		currentAnimationTime += tick;
 		D3DXMATRIXA16 dodgeRot;
-		
+
 		if (currentAnimationTime >= selectedAnimationLength)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
@@ -370,6 +370,8 @@ void Player::ProcessState(CharacterState state)
 				}
 			}
 		}
+
+	}
 		break;
 	case CharacterState::CHARACTER_JUMP:
 	{

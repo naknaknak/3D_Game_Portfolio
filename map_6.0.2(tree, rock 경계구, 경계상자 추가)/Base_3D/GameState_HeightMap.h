@@ -8,7 +8,8 @@
 
 #include "PlantTree.h"
 #include "Rocks_save.h"
-
+#include "Minion.h"
+#include "Boss.h"
 
 class GameState_HeightMap :
 	public GameState
@@ -40,6 +41,7 @@ protected:
 	Rocks_save* rock = nullptr;
 	Player* zombie = nullptr;
 	PlantTree* trees = nullptr;
+	std::vector<Monster*> monsters;
 
 
 };

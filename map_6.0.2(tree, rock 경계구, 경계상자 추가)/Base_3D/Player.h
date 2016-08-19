@@ -1,6 +1,8 @@
 #pragma once
 #include "SkinnedCharacter.h"
 #include "Tree.h"
+#include "Minion.h"
+#include "Boss.h"
 enum DodgeDirection
 {
 	DODGE_FORWARD = 0,
@@ -26,7 +28,9 @@ public:
 
 	virtual void ChangeCharacterState(CharacterState state) override;
 	void SetTrees(std::vector<Tree*> inputTrees) { trees = inputTrees; }
-	//void ChangePlayerState(PlayerState state);
+	
+	void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
+	
 
 protected:
 	virtual void InitializeCoolTime() override;
@@ -41,10 +45,14 @@ protected:
 
 	BoundingSphere forwardBoundingSphere = BoundingSphere();
 
+	//이동
 	CharacterState currentState = CHARACTER_IDLE;
 	DodgeDirection currentDodgeDirection = DODGE_BACKWARD;
 	float dodgeSpeed = 30.0f;
 	static const int DODGE_ROTATION_FACTOR = 3;
+	float jumpSpeed = 20.0f;
+	static const float GRAVITY_ACCEL;
+	static const int jumpConstant = 8;
 	//스킬
 	D3DXVECTOR3 skill1Pos = position;
 	BoundingSphere skill1Sphere = BoundingSphere();
@@ -57,7 +65,7 @@ protected:
 	
 
 	//충돌처리용 벡터
-	std::vector<SkinnedCharacter*> monsters;
+	std::vector<Monster*> monsters;
 	std::vector<Tree*> trees;
 
 };

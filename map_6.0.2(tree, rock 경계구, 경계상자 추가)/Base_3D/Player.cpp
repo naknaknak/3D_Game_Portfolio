@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "Player.h"
 
+//상수 중 int 아닌 것들
 const float Player::skillCastingTime = 2.0f;
+const float Player::GRAVITY_ACCEL = 9.8f;
+
 
 Player::Player()
 {
@@ -79,7 +82,7 @@ void Player::ChangeCharacterState(CharacterState state)
 void Player::ProcessState(CharacterState state)
 {
 	D3DXVECTOR3 pos = position;
-	D3DXVECTOR3 prevPos = position;
+	
 	D3DXVECTOR3 direction;
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
 	D3DXVECTOR3 forward = D3DXVECTOR3(0, 0, 1);
@@ -111,7 +114,7 @@ void Player::ProcessState(CharacterState state)
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
 					if (collision)
 					{
-						pos = prevPos;
+						pos = position;
 						break;
 					}
 
@@ -134,7 +137,7 @@ void Player::ProcessState(CharacterState state)
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
 					if (collision)
 					{
-						pos = prevPos;
+						pos = position;
 						break;
 					}
 
@@ -157,7 +160,7 @@ void Player::ProcessState(CharacterState state)
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
 					if (collision)
 					{
-						pos = prevPos;
+						pos = position;
 						break;
 					}
 
@@ -180,7 +183,7 @@ void Player::ProcessState(CharacterState state)
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
 					if (collision)
 					{
-						pos = prevPos;
+						pos = position;
 						break;
 					}
 
@@ -250,19 +253,25 @@ void Player::ProcessState(CharacterState state)
 				}
 			
 			}
+			if (GetAsyncKeyState('X') & 0x8000 != 0)
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_JUMP);
+			}
 		}
 	}
-	break;
+	break;//idlemove
 	case CharacterState::CHARACTER_ATTACK:
 	{
+		///판정을 넣어야됨
 		double tick = GameManager::GetTick();
 		currentAnimationTime += tick;
 		if (currentAnimationTime >= selectedAnimationLength)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
-		break;
+		
 	}
+	break;//attack
 	case CharacterState::CHARACTER_SKILL1:
 	{
 		double tick = GameManager::GetTick();
@@ -277,7 +286,7 @@ void Player::ProcessState(CharacterState state)
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
 	}
-	break;
+	break;//skill1
 	case CharacterState::CHARACTER_SPRINT:
 	{
 		if (hm->GetHeight(pos, pos.x, pos.z) != false)
@@ -303,7 +312,7 @@ void Player::ProcessState(CharacterState state)
 					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
 					if (collision)
 					{
-						pos = prevPos;
+						pos = position;
 						moveSpeed *= 0.5f;
 						ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 						break;
@@ -320,9 +329,9 @@ void Player::ProcessState(CharacterState state)
 		}
 	
 	}
-	break;
+	break;//sprint
 	case CharacterState::CHARACTER_HIT:
-		//wip
+		///wip
 	break;
 	case CharacterState::CHARACTER_DODGE:
 	{
@@ -362,9 +371,98 @@ void Player::ProcessState(CharacterState state)
 			}
 		}
 		break;
+	case CharacterState::CHARACTER_JUMP:
+	{
+		float floorY;
+		if (hm->GetHeight(floorY, pos.x, pos.z) != false)
+		{
+			float tick = (float)GameManager::GetTick();
+			currentAnimationTime += tick;
+			pos.y = position.y+(jumpSpeed - currentAnimationTime*GRAVITY_ACCEL*jumpConstant)*tick;
+			if (currentAnimationTime >= selectedAnimationLength)
+			{
+				animController->SetTrackSpeed(0, 0.0f);
+			}
+			if (pos.y < floorY)
+			{
+				pos.y = floorY;
+				ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+			}
+			else
+			{
+				if ((GetAsyncKeyState('W') & 0x8000) != 0)
+				{
+
+					pos -= (-direction * moveSpeed * tick);
+					forwardBoundingSphere.center = pos;
+					bool collision = false;
+					for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+					{
+						collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
+						if (collision)
+						{
+							pos = position;
+							break;
+						}
+
+					}
+
+				}
+				else if ((GetAsyncKeyState('S') & 0x8000) != 0)
+				{
+					pos += (-direction * moveSpeed * tick);
+					forwardBoundingSphere.center = pos;
+					bool collision = false;
+					for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+					{
+						collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
+						if (collision)
+						{
+							pos = position;
+							break;
+						}
+
+					}
+				}
+				if ((GetAsyncKeyState('A') & 0x8000) != 0)
+				{
+					pos -= (-right * moveSpeed * tick);
+					forwardBoundingSphere.center = pos;
+					bool collision = false;
+					for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+					{
+						collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
+						if (collision)
+						{
+							pos = position;
+							break;
+						}
+
+					}
+				}
+				else if ((GetAsyncKeyState('D') & 0x8000) != 0)
+				{
+					pos += (-right * moveSpeed * tick);
+					forwardBoundingSphere.center = pos;
+					bool collision = false;
+					for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+					{
+						collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
+						if (collision)
+						{
+							pos = position;
+							break;
+						}
+
+					}
+				}
+			}
+		}
 	}
+	break;
 	default:
 		break;
+		
 	}
 	SetPosition(pos);
 }

@@ -73,22 +73,48 @@ void GameState_HeightMap::Initialize()
  		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
 	}
 
-	/*if (zombie == nullptr)
-	{
-		zombie = new Player( );
-		zombie->Initialize("Zombie/", "zombie_attack02_bite.X");
-		zombie->InitializeAnimation( );
-		zombie->SetPosition(D3DXVECTOR3(195.0f, 13.0f, -306.0f));
-		 
-		zombie->SetHeightMap(heightMap);
-		zombie->SetAnimationIndex(0);
-		GameManager::GetCamera( )->SetLookTarget(goat->GetPositionAddress( ));
-	}*/
+	Monster* monster = nullptr;
+	monster = new Minion();
+	monster->Initialize("Goat/", "Goat_white.x");
+	monster->SetPosition(D3DXVECTOR3(401, 22, -292));
+	monster->SetHeightMap(heightMap);
+	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monsters.push_back(monster);
+
+
+	monster = nullptr;
+	monster = new Minion();
+	monster->Initialize("Goat/", "Goat_white.x");
+	monster->SetPosition(D3DXVECTOR3(401, 22, -299));
+	monster->SetHeightMap(heightMap);
+	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monsters.push_back(monster);
+
+	monster = nullptr;
+	monster = new Minion();
+	monster->Initialize("Goat/", "Goat_white.x");
+	monster->SetPosition(D3DXVECTOR3(408, 22, -292));
+	monster->SetHeightMap(heightMap);
+	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monsters.push_back(monster);
+
+	monster = nullptr;
+	monster = new Minion();
+	monster->Initialize("Goat/", "Goat_white.x");
+	monster->SetPosition(D3DXVECTOR3(399, 22, -290));
+	monster->SetHeightMap(heightMap);
+	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monsters.push_back(monster);
 	
 }
 
 void GameState_HeightMap::Destroy()
 {
+for (auto iter = monsters.begin(); iter != monsters.end(); iter++)
+	{
+		SAFE_DELETE(*iter);
+	}
+	monsters.clear();
 	SAFE_DELETE(zombie);
 	SAFE_DELETE(goat);
 	/*SAFE_DELETE(girl);*/
@@ -117,6 +143,10 @@ void GameState_HeightMap::Update()
 	if (goat)
 	{
 		goat->Update();
+	}
+for (auto iter = monsters.begin(); iter != monsters.end(); iter++)
+	{
+		(*iter)->Update();
 	}
 
 	DebuggingKey( );
@@ -172,7 +202,10 @@ void GameState_HeightMap::Render()
 	{
 		trees->Render( );
 	}
-
+for (auto iter = monsters.begin(); iter != monsters.end(); iter++)
+	{
+		(*iter)->Render();
+	}
 	RECT rc = { 10, RESOLUTION_Y - 55, 11, 11 };
 	UI_Manager::GetFont()->DrawTextA(NULL, "GameState_HeightMap", strlen("GameState_HeightMap"), &rc, DT_TOP | DT_LEFT | DT_NOCLIP, D3DCOLOR_XRGB(255, 255, 255));
 }

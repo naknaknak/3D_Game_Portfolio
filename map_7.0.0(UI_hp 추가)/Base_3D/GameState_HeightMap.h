@@ -1,0 +1,51 @@
+#pragma once
+#include "GameState.h"
+#include "Grid.h"
+#include "HeightMap.h"
+#include "Character_HeightMapMove.h"
+
+#include "ChracterStatusBar.h"
+
+#include "SkyBox.h"
+#include "Player.h"
+
+#include "PlantTree.h"
+#include "Rocks_save.h"
+#include "Minion.h"
+#include "Boss.h"
+
+class GameState_HeightMap :
+	public GameState
+{
+public:
+	GameState_HeightMap();
+	virtual ~GameState_HeightMap();
+
+	virtual void Initialize() override;
+	virtual void Destroy() override;
+	virtual void Reset() override;
+	virtual void Update() override;
+	virtual void Render() override;
+
+	virtual void OnEnterState() override;
+	virtual void OnLeaveState() override;
+
+	virtual LRESULT InputProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+
+	void DebuggingKey( );
+
+protected:
+	Grid* grid = nullptr;
+	HeightMap* heightMap = nullptr;
+	Character_HeightMapMove* girl = nullptr;
+	SkyBox* sky = nullptr;
+	Player* goat = nullptr;
+
+	Rocks_save* rock = nullptr;
+	Player* zombie = nullptr;
+	PlantTree* trees = nullptr;
+	std::vector<Monster*> monsters;
+
+	ChracterStatusBar* statusBar = nullptr;
+};
+

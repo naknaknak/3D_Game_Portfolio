@@ -54,7 +54,7 @@ protected:
 	DodgeDirection currentDodgeDirection = DODGE_BACKWARD;
 	float dodgeSpeed = 30.0f;
 	static const int DODGE_ROTATION_FACTOR = 1;
-	float jumpSpeed = 20.0f;
+	float jumpSpeed = 30.0f;
 	static const float GRAVITY_ACCEL;
 	static const int jumpConstant = 8;
 	static const int SPRINT_MULTYPLICATION = 2;

@@ -9,7 +9,8 @@ public:
 	virtual void Update()=0;
 	inline void SetPlayer(SkinnedCharacter* inputPlayer) { player = inputPlayer; }
 	inline void SetInitialPosition(D3DXVECTOR3 inputInitialPosition) { initialPositon = inputInitialPosition; }
-	
+	inline void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
+
 protected:
 	virtual void ProcessState()=0;
 	virtual void SetPosition(D3DXVECTOR3 newPostion);
@@ -28,6 +29,6 @@ protected:
 	BoundingSphere areaBoundingSphere= BoundingSphere();
 	SkinnedCharacter* player = nullptr;
 	D3DXVECTOR3* target=nullptr;
-
+	std::vector<Monster*> monsters;
 };
 

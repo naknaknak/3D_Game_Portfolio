@@ -73,8 +73,8 @@ void GameState_HeightMap::Initialize( )
 
 	Monster* monster = nullptr;
 	monster = new Minion( );
-	monster->Initialize("Goat/", "Goat.x");
 	monster->SetInitialPosition(D3DXVECTOR3(401, 22, -292));
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 	monster->SetPlayer(lilith);
@@ -83,8 +83,9 @@ void GameState_HeightMap::Initialize( )
 
 	monster = nullptr;
 	monster = new Minion( );
-	monster->Initialize("Goat/", "Goat.x");
 	monster->SetInitialPosition(D3DXVECTOR3(401, 22, -299));
+	monster->Initialize("Goat/", "Goat.x");
+	monster->SetMonsters(monsters);
 	monster->SetHeightMap(heightMap);
 	monster->SetPlayer(lilith);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
@@ -92,17 +93,19 @@ void GameState_HeightMap::Initialize( )
 
 	monster = nullptr;
 	monster = new Minion( );
-	monster->Initialize("Goat/", "Goat.x");
 	monster->SetInitialPosition(D3DXVECTOR3(408, 22, -292));
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 	monster->SetPlayer(lilith);
+	monster->SetMonsters(monsters);
 	monsters.push_back(monster);
 
 	monster = nullptr;
 	monster = new Minion( );
-	monster->Initialize("Goat/", "Goat.x");
 	monster->SetInitialPosition(D3DXVECTOR3(399, 22, -290));
+	monster->Initialize("Goat/", "Goat.x");
+	monster->SetMonsters(monsters);
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 	monster->SetPlayer(lilith);

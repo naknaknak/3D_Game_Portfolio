@@ -16,7 +16,8 @@ protected:
 	void ProcessState() override;
 	void SelectPatrolPosition();
 	bool CollisionMonsters(D3DXVECTOR3* direction);
-	
+	virtual void Hit(float damage);
+
 	BoundingSphere attackSphere = BoundingSphere();
 
 	static const float ATTACK_DAMAGE;
@@ -25,7 +26,7 @@ protected:
 	bool rotateCW = true;
 	float idleTime = 0.0f;
 	float roationAngle = 0.0f;
-	
+	float inDamage = 0.0f;
 };
 
 

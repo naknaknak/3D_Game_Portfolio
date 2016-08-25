@@ -17,7 +17,7 @@ void Minion::Initialize(char* path, char* filename)
 	position = initialPositon;
 	sight_wide.radius = 70.0f;
 	sight_narrow.radius = 20.0f;
-	attackSphere.radius = 0.5f; 
+	attackSphere.radius = 5.0f; 
 }
 
 void Minion::Update()
@@ -67,8 +67,15 @@ void Minion::ProcessState()
 		{
 		}
 		SelectPatrolPosition();
-		if (idleTime < (float)rand() / RAND_MAX * 2) {
+		if (!player->GetIsDead())
+		{
 			ChangeCharacterState(CharacterState::CHARACTER_PATROL);
+		}
+		else
+		{
+			if (idleTime < (float)rand() / RAND_MAX * 2) {
+				ChangeCharacterState(CharacterState::CHARACTER_PATROL);
+			}
 		}
 
 	}break;
@@ -109,18 +116,37 @@ void Minion::ProcessState()
 							}
 							else rotateCW = false;
 							target = player->GetPositionAddress();
-							ChangeCharacterState(CharacterState::CHARACTER_TRACE);
+							if (player->GetIsDead())
+							{
+								
+							}
+							else
+							{
+								ChangeCharacterState(CharacterState::CHARACTER_TRACE);
+							}
 						}
+
 					}
 				}
 			}
+			if (isHit)
+			{
+				hp -= inDamage;
+				if (hp > 0)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_HIT);
+				}
+				else ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+			}
+			
 		}
 	}break;
 	case CharacterState::CHARACTER_ATTACK:
 	{
 		float tick = (float)GameManager::GetTick();
+		
 		currentAnimationTime += tick;
-
+		attackSphere.center = meshCenter+position + direction*0.5f;
 		if (currentAnimationTime >= selectedAnimationLength)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_TRACE);
@@ -129,15 +155,26 @@ void Minion::ProcessState()
 		{
 			bool playerInivisible = player->GetInvisible();
 			bool playerHit = player->GetIsHit();
-			if (!playerInivisible || !playerHit)
+			bool playerDead = player->GetIsDead();
+			if (!playerInivisible && !playerHit&&!playerDead&&!attackHit)
 			{
 				if(Collision::IsSphereToSphere(attackSphere, player->GetBoundingSphereValue()))
 				{
 					if (Collision::IsBoxToSphere(player->GetBoundingBoxValue(), attackSphere))
 					{
 						DealDamage(player, ATTACK_DAMAGE);
+						attackHit = true;
 					}
 				}
+			}
+			if (isHit)
+			{
+				hp -= inDamage;
+				if (hp > 0)
+				{
+					ChangeCharacterState(CharacterState::CHARACTER_HIT);
+				}
+				else ChangeCharacterState(CharacterState::CHARACTER_DEAD);
 			}
 		}
 	}
@@ -149,7 +186,15 @@ void Minion::ProcessState()
 		break;
 	case CharacterState::CHARACTER_HIT:
 	{
+		float tick = (float)GameManager::GetTick();
 
+		currentAnimationTime += tick;
+		
+		if (currentAnimationTime >= selectedAnimationLength*5.0f)
+		{
+			isHit = false;
+			ChangeCharacterState(CharacterState::CHARACTER_TRACE);
+		}
 	}
 		break;
 	case CharacterState::CHARACTER_TRACE:
@@ -166,6 +211,7 @@ void Minion::ProcessState()
 			}
 			if (Collision::IsSphereToSphere(player->GetBoundingSphereValue(), boundingSphere))
 			{
+				attackHit = false;
 				ChangeCharacterState(CharacterState::CHARACTER_ATTACK);
 			}
 			else
@@ -174,6 +220,19 @@ void Minion::ProcessState()
 				forwardBoundingSphere.center = pos;
 			}
 			rotationAngle = toPlayerRotationAngle;
+		}
+		if (isHit)
+		{
+			hp -= inDamage;
+			if (hp > 0)
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_HIT);
+			}
+			else ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+		}
+		if (player->GetIsDead())
+		{
+			ChangeCharacterState(CharacterState::CHARACTER_PATROL);
 		}
 	}
 		break;
@@ -184,12 +243,27 @@ void Minion::ProcessState()
 		break;
 	case CharacterState::CHARACTER_DEAD:
 	{
+		
+		float tick = (float)GameManager::GetTick();
 
+		currentAnimationTime += tick;
+		
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			ChangeCharacterState(CharacterState::CHARACTER_DIED);
+		}
 	}
 		break;
 	case CharacterState::CHARACTER_DIED:
 	{
-
+		float tick=GameManager::GetTick();
+		animController->SetTrackSpeed(0, 0.0f);
+		isDead = true;
+		currentAnimationTime += tick;
+		if (pos.y > -10.0)
+		{
+			pos.y -= tick;
+		}
 	}
 		break;
 	}
@@ -219,4 +293,10 @@ bool Minion::CollisionMonsters(D3DXVECTOR3* direction)
 	}
 
 	return collision;
+}
+void Minion::Hit(float damage)
+{
+	isHit = true;
+	inDamage = damage;
+
 }

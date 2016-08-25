@@ -36,9 +36,9 @@ void SkinnedCharacter::DealDamage(SkinnedCharacter* hitCharacter, int damage)
 	hitCharacter->Hit(damage);
 	
 }
-void SkinnedCharacter::Hit(int damage)
+void SkinnedCharacter::Hit(float damage)
 {
 	isHit = true;
-	hp -= damage;
+	hp =hp- damage;
 	
 }

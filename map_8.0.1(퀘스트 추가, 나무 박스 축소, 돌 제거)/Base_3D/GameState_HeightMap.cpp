@@ -110,6 +110,8 @@ void GameState_HeightMap::Initialize( )
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
+	
+	lilith->SetMonsters(monsters);
 
 }
 
@@ -164,7 +166,9 @@ void GameState_HeightMap::Update( )
 	if (lilith)
 	{
 		lilith->Update();
-		statusBar->GetPlayerHP(*lilith->GetPlayerHP(), 100.0f);
+		float currentHP = *lilith->GetPlayerHP();
+		statusBar->GetPlayerHP(currentHP, 100.0f);
+		
 	}
 
 	for (auto iter = monsters.begin( ); iter != monsters.end( ); iter++)

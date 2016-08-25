@@ -42,24 +42,26 @@ public:
 	
 
 	virtual void DealDamage(SkinnedCharacter* hitCharacter, int damage);
-	virtual void Hit(int damage);
+	
 
 	inline D3DXVECTOR3 GetPosition() { return position; }
 	inline D3DXVECTOR3* GetPositionAddress(){ return &position; }
 	inline void SetHeightMap(HeightMap* inputMap) { hm = inputMap; }
 	inline bool GetIsHit() { return isHit; }
 	inline bool GetInvisible() { return isInvisible; }
-
+	inline bool GetIsDead() { return isDead; }
 protected:
 	virtual void InitializeAnimation();
-	
+	virtual void Hit(float damage);
 
 	HeightMap* hm = nullptr;
 	std::map<CharacterState,std::string> animationNames;
 	CharacterState currentState = CharacterState::CHARACTER_IDLE;
 	bool isHit = false; //맞음
+	bool isDead = false; //죽음
 	float hp;
 	bool isInvisible = false; //무적
+	bool attackHit = false;
 	std::vector<float> cooltime;
 	
 };

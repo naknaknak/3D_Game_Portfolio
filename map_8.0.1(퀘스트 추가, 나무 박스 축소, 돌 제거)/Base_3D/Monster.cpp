@@ -19,3 +19,9 @@ void Monster::SetPosition(D3DXVECTOR3 newPosition)
 	sight_narrow.center = newPosition;
 
 }
+void Monster::Hit(float damage)
+{
+	isHit = true;
+	inDamage = damage;
+
+}

@@ -34,7 +34,8 @@ public:
 	inline float* GetPlayerHP() { return &hp; }
 	
 protected:
-	
+	virtual void Hit(float damage);
+
 	bool CollideTrees();
 	bool CollideRocks();
 	bool CollideMonsters();
@@ -61,11 +62,14 @@ protected:
 	//스킬
 	D3DXVECTOR3 skill1Pos = position;
 	BoundingSphere skill1Sphere = BoundingSphere();
+	BoundingSphere attackSphere = BoundingSphere();
 	static const int maxSkill1Radius = 20;
 	static const float skillCastingTime;
 	static const int ATTACK_DAMAGE = 20;
 	static const int SKILL1_DAMAGE = 40;
-	float hp = 100;
+	float hp = 100.0f;
+	float indamage = 0.0f;
+	static const int ATTACK_RANGE = 8;
 	//update의 파트를 나눔
 	
 	void ProcessState(CharacterState state);

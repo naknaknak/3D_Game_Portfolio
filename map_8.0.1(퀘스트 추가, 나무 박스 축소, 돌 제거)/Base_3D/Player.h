@@ -63,7 +63,7 @@ protected:
 	BoundingSphere skill1Sphere = BoundingSphere();
 	static const int maxSkill1Radius = 20;
 	static const float skillCastingTime;
-	static const int ATTACK_DAMAGE = 10;
+	static const int ATTACK_DAMAGE = 20;
 	static const int SKILL1_DAMAGE = 40;
 	float hp = 100;
 	//update의 파트를 나눔

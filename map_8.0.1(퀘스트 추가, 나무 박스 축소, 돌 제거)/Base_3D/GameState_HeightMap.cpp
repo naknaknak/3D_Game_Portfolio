@@ -164,6 +164,7 @@ void GameState_HeightMap::Update( )
 	if (lilith)
 	{
 		lilith->Update();
+		statusBar->GetPlayerHP(*lilith->GetPlayerHP(), 100.0f);
 	}
 
 	for (auto iter = monsters.begin( ); iter != monsters.end( ); iter++)

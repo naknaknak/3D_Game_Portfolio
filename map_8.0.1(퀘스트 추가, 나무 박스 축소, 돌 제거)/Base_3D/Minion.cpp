@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Minion.h"
 
-
+const float Minion::ATTACK_DAMAGE = 10.0f;
 Minion::Minion()
 {
 }
@@ -15,8 +15,9 @@ void Minion::Initialize(char* path, char* filename)
 	SkinnedMesh::Initialize(path, filename);
 	InitializeAnimation();
 	position = initialPositon;
-	sight_wide.radius = 90.0f;
+	sight_wide.radius = 70.0f;
 	sight_narrow.radius = 20.0f;
+	attackSphere.radius = 0.5f; 
 }
 
 void Minion::Update()
@@ -117,7 +118,28 @@ void Minion::ProcessState()
 	}break;
 	case CharacterState::CHARACTER_ATTACK:
 	{
+		float tick = (float)GameManager::GetTick();
+		currentAnimationTime += tick;
 
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			ChangeCharacterState(CharacterState::CHARACTER_TRACE);
+		}
+		else
+		{
+			bool playerInivisible = player->GetInvisible();
+			bool playerHit = player->GetIsHit();
+			if (!playerInivisible || !playerHit)
+			{
+				if(Collision::IsSphereToSphere(attackSphere, player->GetBoundingSphereValue()))
+				{
+					if (Collision::IsBoxToSphere(player->GetBoundingBoxValue(), attackSphere))
+					{
+						DealDamage(player, ATTACK_DAMAGE);
+					}
+				}
+			}
+		}
 	}
 		break;
 	case CharacterState::CHARACTER_DODGE:

@@ -32,7 +32,7 @@ public:
 	
 	inline void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
 	inline float* GetPlayerHP() { return &hp; }
-
+	
 protected:
 	
 	bool CollideTrees();

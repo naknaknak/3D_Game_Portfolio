@@ -214,7 +214,7 @@ void Player::ProcessState(CharacterState state)
 			}
 			if ((GetAsyncKeyState('C') & 0x0001) != 0)
 			{
-if ((GetAsyncKeyState('W') & 0x8000) != 0)
+				if ((GetAsyncKeyState('W') & 0x8000) != 0)
 				{
 					ChangeCharacterState(CharacterState::CHARACTER_DODGE_F);
 				}
@@ -598,7 +598,14 @@ bool Player::HitMonsters(BoundingSphere& attacksphere,int damage)
 				collision = Collision::IsSphereToSphere(attacksphere, (*iter)->GetBoundingSphereValue());
 				if (collision)
 				{
-					DealDamage(*iter, damage);
+					if (!((*iter)->isHit()))
+					{
+						
+					}
+					else
+					{
+						DealDamage(*iter, damage);
+					}
 				}
 			
 

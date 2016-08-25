@@ -28,6 +28,7 @@ public:
 	inline BoundingSphere* GetBoundingSphere( ) { return &boundingSphere; }
 	inline BoundingSphere GetBoundingSphereValue() { return boundingSphere; }
 	inline BoundingBox* GetBoundingBox() { return &boundingBox;	}
+	inline BoundingBox GetBoundingBoxValue() { return  boundingBox; }
 	inline D3DXVECTOR3 GetPositon() { return position; }
 
 protected:

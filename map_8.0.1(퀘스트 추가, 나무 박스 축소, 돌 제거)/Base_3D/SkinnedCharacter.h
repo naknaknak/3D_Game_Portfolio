@@ -48,6 +48,8 @@ public:
 	inline D3DXVECTOR3* GetPositionAddress(){ return &position; }
 	inline void SetHeightMap(HeightMap* inputMap) { hm = inputMap; }
 	inline bool GetIsHit() { return isHit; }
+	inline bool GetInvisible() { return isInvisible; }
+
 protected:
 	virtual void InitializeAnimation();
 	

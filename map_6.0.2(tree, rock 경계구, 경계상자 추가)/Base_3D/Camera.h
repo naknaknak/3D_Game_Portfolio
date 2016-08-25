@@ -31,7 +31,7 @@ public:
 	inline void SetLookTarget(D3DXVECTOR3* target){ lookTarget = target; }
 	inline void SetDistance(float distance){ camDistance = distance; }
 	inline void SetRotateX(float rotation){ camRotX = rotation; }
-	
+	inline void SetHeightMap(HeightMap* inputHeightMap) { hm = inputHeightMap; }
 private:
 
 	// Frustum
@@ -52,13 +52,15 @@ private:
 	float camRotX = 0.53f;		//radian
 	float camRotY = 0.0f;
 	float camDistance = 4.5f;
+	float deltaDistance = 0.0f;
 
 	bool isDrag = false;
 	POINT prevMousePos;
+	bool dontGoFar = false;
 
 	D3DXVECTOR3* lookTarget = nullptr;
 	
 	FrustumCulling frustum;
-
+	HeightMap* hm = nullptr;
 };
 

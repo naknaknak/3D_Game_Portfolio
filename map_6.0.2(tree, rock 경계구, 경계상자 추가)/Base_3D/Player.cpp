@@ -73,7 +73,8 @@ void Player::ChangeCharacterState(CharacterState state)
 	currentState = state;
 	SetAnimationName(animationNames[state].c_str(), &selectedAnimationLength);
 	animController->SetTrackPosition(0, 0.0f);
-	animController->SetTrackSpeed(0, 1.0f);
+	animController->SetTrackSpeed(0, 1.5f);
+	selectedAnimationLength *= 0.67f;
 	currentAnimationTime = 0.0f;
 }
 
@@ -88,9 +89,10 @@ void Player::ProcessState(CharacterState state)
 	D3DXVECTOR3 forward = D3DXVECTOR3(0, 0, 1);
 	D3DXVECTOR3 right;
 
-	D3DXVec3TransformCoord(&direction, &forward, &rotation);
-	D3DXVec3Cross(&right, &direction, &up);
-
+//	D3DXVec3TransformCoord(&direction, &forward, &rotation);
+//	D3DXVec3Cross(&right, &direction, &up);
+	direction = D3DXVECTOR3(rotation._31, rotation._32, rotation._33);
+	right = D3DXVECTOR3(-rotation._11, -rotation._12,- rotation._13);
 	
 
 	switch (state)
@@ -108,18 +110,15 @@ void Player::ProcessState(CharacterState state)
 
 				pos -= (-direction * moveSpeed * tick);
 				forwardBoundingSphere.center = pos;
-				bool collision = false;
-				for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+				bool collisionTrees = CollideTrees();
+				bool collisionRocks = false;
+				if (collisionTrees || collisionRocks)
 				{
-					collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
-					if (collision)
-					{
-						pos = position;
-						break;
-					}
-
+					pos = position;
+					break;
 				}
-				if (!collision) {
+				else
+				{
 					if (currentState == CharacterState::CHARACTER_IDLE)
 					{
 						ChangeCharacterState(CharacterState::CHARACTER_MOVE);
@@ -206,7 +205,7 @@ void Player::ProcessState(CharacterState state)
 
 
 			//state transition
-			if ((GetAsyncKeyState(VK_SPACE) & 0x8000) != 0)
+			if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0)
 			{
 				ChangeCharacterState(CharacterState::CHARACTER_ATTACK);
 			}
@@ -216,31 +215,33 @@ void Player::ProcessState(CharacterState state)
 			}
 			else if ((GetAsyncKeyState(VK_LSHIFT) & 0x8000) != 0)
 			{
-				moveSpeed *= 2;
+				moveSpeed *= SPRINT_MULTYPLICATION;
 				ChangeCharacterState(CharacterState::CHARACTER_SPRINT);
 			}
 			if ((GetAsyncKeyState('C') & 0x0001) != 0)
 			{
+				isInvisible = true;
 				if ((GetAsyncKeyState('W') & 0x8000) != 0)
 				{
-					currentDodgeDirection = DodgeDirection::DODGE_FORWARD;
+					ChangeCharacterState(CharacterState::CHARACTER_DODGE_F);
 				}
 				else	if ((GetAsyncKeyState('A') & 0x8000) != 0)
 				{
-					currentDodgeDirection = DodgeDirection::DODGE_LEFT;
+					ChangeCharacterState(CharacterState::CHARACTER_DODGE_L);
 				}
 				else	if ((GetAsyncKeyState('S') & 0x8000) != 0)
 				{
-					currentDodgeDirection = DodgeDirection::DODGE_BACKWARD;
+					ChangeCharacterState(CharacterState::CHARACTER_DODGE_B);
 				}
 				else	if ((GetAsyncKeyState('D') & 0x8000) != 0)
 				{
-					currentDodgeDirection = DodgeDirection::DODGE_RIGHT;
+					ChangeCharacterState(CharacterState::CHARACTER_DODGE_R);
 				}
-				else currentDodgeDirection = DodgeDirection::DODGE_BACKWARD;
+				else ChangeCharacterState(CharacterState::CHARACTER_DODGE_B);
 
-				ChangeCharacterState(CharacterState::CHARACTER_DODGE);
+				
 			}
+
 			if (isHit)
 			{
 				if (hp > 0)
@@ -253,7 +254,8 @@ void Player::ProcessState(CharacterState state)
 				}
 			
 			}
-			if (GetAsyncKeyState('X') & 0x8000 != 0)
+
+			if ((GetAsyncKeyState('X') & 0x8000) != 0)
 			{
 				ChangeCharacterState(CharacterState::CHARACTER_JUMP);
 			}
@@ -265,11 +267,33 @@ void Player::ProcessState(CharacterState state)
 		///판정을 넣어야됨
 		double tick = GameManager::GetTick();
 		currentAnimationTime += tick;
+		BoundingSphere attackSphere;
+		attackSphere.center = position + meshCenter + forward*0.5f;
+		attackSphere.radius = 0.5f;
+		
 		if (currentAnimationTime >= selectedAnimationLength)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
+		else
+		{
+			bool hit = HitMonsters(attackSphere,ATTACK_DAMAGE);
+			
+		}
 		
+		
+		if (isHit)
+		{
+			if (hp > 0)
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_HIT);
+			}
+			else
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+			}
+
+		}
 	}
 	break;//attack
 	case CharacterState::CHARACTER_SKILL1:
@@ -284,6 +308,20 @@ void Player::ProcessState(CharacterState state)
 		if (currentAnimationTime >= skillCastingTime)
 		{
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+		}
+
+
+		if (isHit)
+		{
+			if (hp > 0)
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_HIT);
+			}
+			else
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+			}
+
 		}
 	}
 	break;//skill1
@@ -313,7 +351,7 @@ void Player::ProcessState(CharacterState state)
 					if (collision)
 					{
 						pos = position;
-						moveSpeed *= 0.5f;
+						moveSpeed /= SPRINT_MULTYPLICATION ;
 						ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 						break;
 					}
@@ -323,56 +361,121 @@ void Player::ProcessState(CharacterState state)
 			}
 			else
 			{
-				moveSpeed *= 0.5f;
+				moveSpeed /= SPRINT_MULTYPLICATION;
 				ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 			}
 		}
-	
+		
+		if (isHit)
+		{
+			if (hp > 0)
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_HIT);
+			}
+			else
+			{
+				ChangeCharacterState(CharacterState::CHARACTER_DEAD);
+			}
+
+		}
 	}
 	break;//sprint
 	case CharacterState::CHARACTER_HIT:
-		///wip
-	break;
-	case CharacterState::CHARACTER_DODGE:
 	{
+		//죽은건 따로 처리해준다.
+		double tick = GameManager::GetTick();
+		currentAnimationTime += tick;
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			isHit = false;
+			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+
+		}
+	}
+	break;
+	case CharacterState::CHARACTER_DODGE_L:
+	{
+		alpha = 0.2f;
 		float tick = (float)GameManager::GetTick();
 		currentAnimationTime += tick;
 		D3DXMATRIXA16 dodgeRot;
 
 		if (currentAnimationTime >= selectedAnimationLength)
 		{
+			isInvisible = false;
+			alpha = 1.0f;
+
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
 		else
 		{
-			if (hm->GetHeight(pos, pos.x, pos.z) != false)
-			{
-				switch (currentDodgeDirection)
-				{
-				case DodgeDirection::DODGE_FORWARD:
-					pos += direction*dodgeSpeed*tick;
-					break;
-				case DodgeDirection::DODGE_BACKWARD:
-					pos -= direction*dodgeSpeed*tick;
-					break;
-				case DodgeDirection::DODGE_RIGHT:
-					D3DXMatrixRotationY(&dodgeRot, -currentAnimationTime * DODGE_ROTATION_FACTOR);
-					D3DXVec3TransformCoord(&right, &right, &dodgeRot);
-					pos += (-right * dodgeSpeed * tick);
-					break;
-				case DodgeDirection::DODGE_LEFT:
-					D3DXMatrixRotationY(&dodgeRot, currentAnimationTime * DODGE_ROTATION_FACTOR);
-					D3DXVec3TransformCoord(&right, &right, &dodgeRot);
-					pos -= (-right * dodgeSpeed * tick);
-					break;
-				default:
-					break;
-				}
-			}
+		
+			D3DXMatrixRotationY(&dodgeRot, currentAnimationTime * DODGE_ROTATION_FACTOR);
+			D3DXVec3TransformCoord(&right, &right, &dodgeRot);
+			pos += (right * dodgeSpeed * tick);
 		}
-
 	}
-		break;
+	break;
+	case CharacterState::CHARACTER_DODGE_R:
+	{
+		alpha = 0.2f;
+
+		float tick = (float)GameManager::GetTick();
+		currentAnimationTime += tick;
+		D3DXMATRIXA16 dodgeRot;
+
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			isInvisible = false;
+			alpha = 1.0f;
+			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+		}
+		else
+		{
+			D3DXMatrixRotationY(&dodgeRot, -currentAnimationTime * DODGE_ROTATION_FACTOR);
+			D3DXVec3TransformCoord(&right, &right, &dodgeRot);
+			pos -= (right * dodgeSpeed * tick);
+		}
+	}
+	break;
+	case CharacterState::CHARACTER_DODGE_F:
+	{
+		alpha = 0.2f;
+		float tick = (float)GameManager::GetTick();
+		currentAnimationTime += tick;
+		D3DXMATRIXA16 dodgeRot;
+
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			isInvisible = false;
+			alpha = 1.0f;
+			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+		}
+		else
+		{
+			pos += direction*dodgeSpeed*tick;
+		}
+	}
+	break;
+	case CharacterState::CHARACTER_DODGE_B:
+	{
+		alpha = 0.2f;
+		float tick = (float)GameManager::GetTick();
+		currentAnimationTime += tick;
+		D3DXMATRIXA16 dodgeRot;
+		
+
+		if (currentAnimationTime >= selectedAnimationLength)
+		{
+			isInvisible = false;
+			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+		}
+		else
+		{
+			pos -= direction*dodgeSpeed*tick;
+		}
+	}
+	break;
 	case CharacterState::CHARACTER_JUMP:
 	{
 		float floorY;
@@ -434,7 +537,7 @@ void Player::ProcessState(CharacterState state)
 					for (auto iter = trees.begin(); iter != trees.end(); ++iter)
 					{
 						collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
-						if (collision)
+						if (collision) 
 						{
 							pos = position;
 							break;
@@ -467,4 +570,65 @@ void Player::ProcessState(CharacterState state)
 		
 	}
 	SetPosition(pos);
+}
+bool Player::CollideTrees()
+{
+	bool collision = false;
+	if (!trees.empty())
+	{
+		for (auto iter = trees.begin(); iter != trees.end(); ++iter)
+		{
+			collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphere());
+			if (collision)
+			{
+				break;
+			}
+
+		}
+		
+	}
+	return collision;
+}
+
+bool Player::CollideRocks()
+{
+	return false;
+}
+bool Player::CollideMonsters()
+{
+	bool collision = false;
+	if (!monsters.empty())
+	{
+		for (auto iter = monsters.begin(); iter != monsters.end(); ++iter)
+		{
+			collision = Collision::IsSphereToSphere(forwardBoundingSphere, (*iter)->GetBoundingSphereValue());
+			if (collision)
+			{
+				break;
+			}
+
+		}
+	}
+	
+		return collision;
+}
+bool Player::HitMonsters(BoundingSphere& attacksphere,int damage)
+{
+	bool collision = false;
+	if (!monsters.empty())
+	{
+		for (auto iter = monsters.begin(); iter != monsters.end(); ++iter)
+		{
+			
+				collision = Collision::IsSphereToSphere(attacksphere, (*iter)->GetBoundingSphereValue());
+				if (collision)
+				{
+					DealDamage(*iter, damage);
+				}
+			
+
+		}
+	}
+
+	return collision;
 }

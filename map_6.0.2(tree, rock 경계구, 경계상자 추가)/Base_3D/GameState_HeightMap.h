@@ -36,7 +36,7 @@ protected:
 	HeightMap* heightMap = nullptr;
 	Character_HeightMapMove* girl = nullptr;
 	SkyBox* sky = nullptr;
-	Player* goat = nullptr;
+	Player* lilith = nullptr;
 
 	Rocks_save* rock = nullptr;
 	Player* zombie = nullptr;

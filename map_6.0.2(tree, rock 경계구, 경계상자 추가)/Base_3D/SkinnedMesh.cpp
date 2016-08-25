@@ -22,6 +22,8 @@ void SkinnedMesh::Initialize(char* path, char* fileName)
 	effect = original->effect;
 	boundingSphere = original->boundingSphere;
 	boundingBox = original->boundingBox;
+	initialMax = boundingBox.max;
+	initialMin = boundingBox.min;
 	meshCenter = boundingSphere.center;
 
 	// 에니메이션은 따로 돌아야 하니 클론

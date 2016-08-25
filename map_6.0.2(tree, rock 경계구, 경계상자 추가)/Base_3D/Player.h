@@ -1,8 +1,9 @@
 #pragma once
 #include "SkinnedCharacter.h"
 #include "Tree.h"
-#include "Minion.h"
 #include "Boss.h"
+#include "Minion.h"
+
 enum DodgeDirection
 {
 	DODGE_FORWARD = 0,
@@ -31,11 +32,14 @@ public:
 	inline void SetTrees(std::vector<Tree*> inputTrees) { trees = inputTrees; }
 	
 	inline void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
-	inline int* GetPlayerHP() { return &hp; }
+	inline float* GetPlayerHP() { return &hp; }
 
 protected:
 	virtual void InitializeCoolTime() override;
-
+	bool CollideTrees();
+	bool CollideRocks();
+	bool CollideMonsters();
+	bool HitMonsters(BoundingSphere& sphere,int damage);
 
 	D3DXVECTOR3 rotateAxis = D3DXVECTOR3(0, 1, 0);
 	float rotationAngle = 0.0f;
@@ -44,24 +48,28 @@ protected:
 	D3DXMATRIXA16 scale;
 	D3DXMATRIXA16 rotation;
 
+
 	BoundingSphere forwardBoundingSphere = BoundingSphere();
 
 	//이동
 	CharacterState currentState = CHARACTER_IDLE;
 	DodgeDirection currentDodgeDirection = DODGE_BACKWARD;
 	float dodgeSpeed = 30.0f;
-	static const int DODGE_ROTATION_FACTOR = 3;
+	static const int DODGE_ROTATION_FACTOR = 1;
 	float jumpSpeed = 20.0f;
 	static const float GRAVITY_ACCEL;
 	static const int jumpConstant = 8;
-	//스킬
+	static const int SPRINT_MULTYPLICATION = 2;
+	
+	//스킬, 공격
 	D3DXVECTOR3 skill1Pos = position;
 	BoundingSphere skill1Sphere = BoundingSphere();
 	static const int maxSkill1Radius = 20;
 	static const float skillCastingTime;
-	
+	static const int ATTACK_DAMAGE = 10;
+	static const int SKILL1_DAMAGE = 40;
+	float hp = 100;
 	//update의 파트를 나눔
-	
 	void ProcessState(CharacterState state);
 	
 

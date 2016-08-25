@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
-
+#define CAMERA_MINHEIGHT 10.0f
 
 Camera::Camera()
 {
@@ -52,7 +52,7 @@ void Camera::Update( )
 	D3DXVec3Normalize(&vecForward, &vecForward);
 	D3DXVec3Normalize(&vecRight, &vecRight);
 	D3DXVec3Normalize(&upVector, &upVector);
-
+	float mapHeight = 0.0f;
 	D3DXMATRIXA16 matRotationX, matRotationY;
 	D3DXMATRIXA16 matRotation;
 	D3DXMatrixRotationX(&matRotationX, camRotX);
@@ -67,11 +67,30 @@ void Camera::Update( )
 		lookAt = (*lookTarget);
 		eyePosition = (*lookTarget) + eyePosition;
 	}
+	if (hm)
+	{
+		//카메라가 맵 안
+		if (hm->GetHeight(mapHeight, eyePosition.x, eyePosition.z))
+		{
+			//바닥에 딱 붙이면 밑이 보이므로 임의의 값을 넣어줌
+			if (eyePosition.y < mapHeight+ CAMERA_MINHEIGHT)
+			{
+				eyePosition.y = mapHeight+ CAMERA_MINHEIGHT;
+			}
+		}//맵 밖. 어떻게 해야될지 모르겠다.
+		else
+		{
+
+			
+			dontGoFar = true;
+
+		}
+	}
+
 
 	lookingDirection = eyePosition;
 	lookingDirection.y = 0;
 	D3DXVec3Normalize(&lookingDirection, &lookingDirection);
-
 	D3DXMATRIXA16 matView;
 	D3DXMatrixLookAtLH(&matView, &eyePosition, &lookAt, &upVector);
 	GameManager::GetDevice( )->SetTransform(D3DTS_VIEW, &matView);
@@ -124,9 +143,21 @@ LRESULT Camera::CameraInputProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	}
 	break;
 	case WM_MOUSEWHEEL:
-		camDistance += -GET_WHEEL_DELTA_WPARAM(wParam) / 10.f;
-		if (camDistance < 1.0f)
-			camDistance = 1.0f;
+		deltaDistance= -GET_WHEEL_DELTA_WPARAM(wParam) / 10.f;
+		if (dontGoFar && deltaDistance>0)
+		{
+
+		}
+		else
+		{
+			camDistance += deltaDistance;
+
+		}
+		
+
+		if (camDistance < 10.0f)
+			camDistance = 10.0f;
+		else if (camDistance>128.0f)camDistance = 128.0f;
 		break;
 	}
 

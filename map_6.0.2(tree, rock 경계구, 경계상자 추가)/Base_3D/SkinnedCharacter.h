@@ -7,9 +7,18 @@ enum CharacterState
 {
 	CHARACTER_IDLE = 0,
 	CHARACTER_MOVE ,
+	CHARACTER_PATROL, //minion용
 	CHARACTER_SPRINT,
+	CHARACTER_TRACE,
 	CHARACTER_ATTACK,
-	CHARACTER_DODGE,
+	CHARACTER_ATTACK1,//주인공은 평타 3타를 때린다
+	CHARACTER_ATTACK2,
+	CHARACTER_ATTACK3,
+	CHARACTER_DODGE,//염소가 dodge를 하나만 쓴다
+	CHARACTER_DODGE_F,//보스와 주인공은 dodge를 네개씩 쓴다
+	CHARACTER_DODGE_B,
+	CHARACTER_DODGE_R,
+	CHARACTER_DODGE_L,
 	CHARACTER_JUMP,
 	CHARACTER_SKILL1,
 	CHARACTER_SKILL2,
@@ -18,6 +27,7 @@ enum CharacterState
 	CHARACTER_DEAD, //죽는중
 	CHARACTER_DIED, //다죽음
 	CHARACTER_HIT, //맞음
+	CHARACTER_RETURN,
 	NUM_OF_CHARACTERSTATE
 };
 class SkinnedCharacter :	// 추상클래스
@@ -33,11 +43,12 @@ public:
 
 	virtual void DealDamage(SkinnedCharacter* hitCharacter, int damage);
 	virtual void Hit(int damage);
+	
 
 	inline D3DXVECTOR3 GetPosition() { return position; }
 	inline D3DXVECTOR3* GetPositionAddress(){ return &position; }
 	inline void SetHeightMap(HeightMap* inputMap) { hm = inputMap; }
-
+	inline bool GetIsHit() { return isHit; }
 protected:
 	virtual void InitializeAnimation();
 	virtual void InitializeCoolTime()=0;

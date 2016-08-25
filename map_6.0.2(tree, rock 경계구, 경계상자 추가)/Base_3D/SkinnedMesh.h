@@ -24,8 +24,9 @@ public:
 
 	void Load(char* path, char* fileName);	//실제 X파일 부르는 함수. SkinnedMeshManager안에서만 사용 할 것
 
-	inline void SetPosition(D3DXVECTOR3 v) { position = v; boundingSphere.center = v+meshCenter; }
+	inline void SetPosition(D3DXVECTOR3 v) { position = v; boundingSphere.center = v + meshCenter; boundingBox.max = initialMax + v; boundingBox.min = initialMin + v; }
 	inline BoundingSphere* GetBoundingSphere( ) { return &boundingSphere; }
+	inline BoundingSphere GetBoundingSphereValue() { return boundingSphere; }
 	inline BoundingBox* GetBoundingBox() { return &boundingBox;	}
 	inline D3DXVECTOR3 GetPositon() { return position; }
 
@@ -47,6 +48,8 @@ protected:
 	double selectedAnimationLength = 0.0f;
 	double currentAnimationTime = 0.0f;
 	D3DXVECTOR3 meshCenter;
+	D3DXVECTOR3 initialMax;
+	D3DXVECTOR3 initialMin;
 
 	// 클론 된건지 원본인지 표시용
 	bool isClone = false;

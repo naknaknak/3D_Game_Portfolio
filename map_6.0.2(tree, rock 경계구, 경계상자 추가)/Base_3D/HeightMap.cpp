@@ -291,7 +291,7 @@ HRESULT HeightMap::QuadTreeDraw( )
 }
 bool HeightMap::GetHeight(float& outHeight, float x, float z)
 {
-	if (x < 0 || z>0 || x > mapSize || z < -mapSize)
+	if (x < 1 || z>-1 || x > tileCount || z < -tileCount)
 	{
 		return false;
 	}

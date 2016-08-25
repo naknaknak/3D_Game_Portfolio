@@ -67,9 +67,6 @@
     <Filter Include="소스 파일\Framework\UI">
       <UniqueIdentifier>{67ac41a3-3eba-4959-af4f-5fd9eb0d4b01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Framework\Managers">
-      <UniqueIdentifier>{73c83be0-a7a8-444f-bd3b-b00274cd7d1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Framework\Utils">
       <UniqueIdentifier>{9ddc65c8-8127-463f-a728-d1c24be540bf}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,9 @@
     </Filter>
     <Filter Include="헤더 파일\Object\Field\HeightMap">
       <UniqueIdentifier>{443d518d-4f9d-43fc-a8f4-0965d64ca6ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Framework\Managers">
+      <UniqueIdentifier>{73c83be0-a7a8-444f-bd3b-b00274cd7d1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -407,14 +407,14 @@
     <ClInclude Include="AIController.h">
       <Filter>헤더 파일\Framework\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>헤더 파일\Framework\Utils</Filter>
+    <ClInclude Include="Minion.h">
+      <Filter>헤더 파일\Object\X_File</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>헤더 파일\Framework\Utils</Filter>
+      <Filter>헤더 파일\Object\X_File</Filter>
     </ClInclude>
-    <ClInclude Include="Minion.h">
-      <Filter>헤더 파일\Framework\Utils</Filter>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일\Object\X_File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

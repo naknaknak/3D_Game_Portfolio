@@ -38,6 +38,7 @@ void GameState_HeightMap::Initialize()
 	{
 		heightMap = new HeightMap;
 		heightMap->Initialize("field_.raw", "field_1.png");
+		GameManager::GetCamera()->SetHeightMap(heightMap);
 		//heightMap->Initialize("field_.raw", "field_1.png", 8, HEIGHT_FLAG::HM_NORMAL);
 	}
 	if (rock == nullptr)
@@ -60,50 +61,55 @@ void GameState_HeightMap::Initialize()
 	//	girl->SetPosition(D3DXVECTOR3(35.5f, 20.0f, -65.5f));
 	//	GameManager::GetCamera()->SetLookTarget(girl->GetPositionAdress());
 	//}
-	if (goat == nullptr)
+	if (lilith == nullptr)
 	{ 
-		goat = new Player();
-		goat->Initialize("Goat/", "Goat.X");
+		lilith = new Player();
+		lilith->Initialize("lilith/", "lilith.X");
 		
-		goat->SetPosition(D3DXVECTOR3(193.0f, 12.0f, -306.0f));
-		goat->SetTrees(trees->GetTrees());
-
-		goat->SetHeightMap(heightMap); 
-		goat->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
- 		GameManager::GetCamera()->SetLookTarget(goat->GetPositionAddress());
+		lilith->SetPosition(D3DXVECTOR3(193.0f, 12.0f, -306.0f));
+		lilith->SetTrees(trees->GetTrees());
+		
+		lilith->SetHeightMap(heightMap); 
+		lilith->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+ 		GameManager::GetCamera()->SetLookTarget(lilith->GetPositionAddress());
+		GameManager::GetCamera()->SetDistance(20.0f);
 	}
 
 	Monster* monster = nullptr;
 	monster = new Minion();
-	monster->Initialize("Goat/", "Goat_white.x");
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetPosition(D3DXVECTOR3(401, 22, -292));
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
 
 
 	monster = nullptr;
 	monster = new Minion();
-	monster->Initialize("Goat/", "Goat_white.x");
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetPosition(D3DXVECTOR3(401, 22, -299));
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
 
 	monster = nullptr;
 	monster = new Minion();
-	monster->Initialize("Goat/", "Goat_white.x");
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetPosition(D3DXVECTOR3(408, 22, -292));
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
 
 	monster = nullptr;
 	monster = new Minion();
-	monster->Initialize("Goat/", "Goat_white.x");
+	monster->Initialize("Goat/", "Goat.x");
 	monster->SetPosition(D3DXVECTOR3(399, 22, -290));
 	monster->SetHeightMap(heightMap);
 	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
 	
 }
@@ -116,7 +122,7 @@ for (auto iter = monsters.begin(); iter != monsters.end(); iter++)
 	}
 	monsters.clear();
 	SAFE_DELETE(zombie);
-	SAFE_DELETE(goat);
+	SAFE_DELETE(lilith);
 	/*SAFE_DELETE(girl);*/
 	SAFE_DELETE(trees);
 	SAFE_DELETE(rock);
@@ -140,9 +146,9 @@ void GameState_HeightMap::Update()
 		//girl->Update();
 		//girl->GroundCheck();
 	} 
-	if (goat)
+	if (lilith)
 	{
-		goat->Update();
+		lilith->Update();
 	}
 for (auto iter = monsters.begin(); iter != monsters.end(); iter++)
 	{
@@ -174,15 +180,15 @@ void GameState_HeightMap::Render()
 	{
 		girl->Render();
 	}
-	if (goat)
+	if (lilith)
 	{
-		goat->Render();
-		BoundingSphere goat_boundingSphere = *goat->GetBoundingSphere( );
+		lilith->Render();
+		BoundingSphere goat_boundingSphere = *lilith->GetBoundingSphere( );
 		std::vector<Tree*>& vTrees = trees->GetTrees( );
 		for (auto iter = vTrees.begin( ); iter != vTrees.end( ); ++iter)
 		{
-			bool aa = Collision::IsSphereToSphere(*goat->GetBoundingSphere( ), (*iter)->GetBoundingSphere( ));
-			if (Collision::IsSphereToSphere(*goat->GetBoundingSphere( ), (*iter)->GetBoundingSphere( )))
+			bool aa = Collision::IsSphereToSphere(*lilith->GetBoundingSphere( ), (*iter)->GetBoundingSphere( ));
+			if (Collision::IsSphereToSphere(*lilith->GetBoundingSphere( ), (*iter)->GetBoundingSphere( )))
 			{
 				int n = 0;
 

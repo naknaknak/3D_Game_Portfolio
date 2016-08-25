@@ -14,3 +14,7 @@ void Boss::Update()
 {
 
 }
+void Boss::ProcessState()
+{
+
+}

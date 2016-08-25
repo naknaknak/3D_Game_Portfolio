@@ -11,5 +11,13 @@ public:
 
 	virtual void ChangeCharacterState(CharacterState state);
 	virtual void InitializeCoolTime();
+	
+protected:
+	void ProcessState() override;
+	void SelectPatrolPosition();
+	
+	float hp = 100.0f;
+	D3DXVECTOR3 patrolPosition;
+	bool rotateCW = true;
 };
 

@@ -598,14 +598,15 @@ bool Player::HitMonsters(BoundingSphere& attacksphere,int damage)
 				collision = Collision::IsSphereToSphere(attacksphere, (*iter)->GetBoundingSphereValue());
 				if (collision)
 				{
-					if (!((*iter)->isHit()))
+					
+					/*if (!((*iter)->isHit()))
 					{
 						
 					}
 					else
 					{
 						DealDamage(*iter, damage);
-					}
+					}*/
 				}
 			
 

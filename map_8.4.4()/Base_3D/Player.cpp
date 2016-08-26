@@ -370,10 +370,12 @@ void Player::ProcessState(CharacterState state)
 			if (hp > 0)
 			{
 				hp -= indamage;
+				moveSpeed /= SPRINT_MULTYPLICATION;
 				ChangeCharacterState(CharacterState::CHARACTER_HIT);
 			}
 			else
 			{
+				moveSpeed /= SPRINT_MULTYPLICATION;
 				ChangeCharacterState(CharacterState::CHARACTER_DEAD);
 			}
 
@@ -448,7 +450,7 @@ void Player::ProcessState(CharacterState state)
 		{
 			isInvisible = false;
 			alpha = 1.0f;
-
+			
 			ChangeCharacterState(CharacterState::CHARACTER_IDLE);
 		}
 		else

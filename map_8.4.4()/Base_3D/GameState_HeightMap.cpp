@@ -190,9 +190,16 @@ void GameState_HeightMap::Update( )
 			quest->ShowQuest(true);
 			quest->AcceptQuest(selectOK[QUEST_START]);
 		}
-		count_dead = monsters.size( ) - count_dead-1;
-		quest->SetCount_QuestListShow(count_dead);
-
+		if (selectOK[QUEST_END])
+		{
+			count_dead = monsters.size() - count_dead;
+			quest->SetCount_QuestListShow(count_dead);
+		}
+		else
+		{
+			count_dead = monsters.size() - count_dead - 1;
+			quest->SetCount_QuestListShow(count_dead);
+		}
 	}
 	count_dead = 0;
 	int monsterHPIndex = 0;
@@ -232,9 +239,10 @@ void GameState_HeightMap::Update( )
 	}
 	if (statusBar)statusBar->Update();
 	if (quest)	quest->Update();
-	if (count_dead == monsters.size() && selectOK[QUEST_END] && selectOK[QUEST_START])
+	if (count_dead == monsters.size() && selectOK[QUEST_END] )
 	{
 		quest->ShowCompleteOK(true);
+		selectOK[QUEST_END] = false;
 	}
 
 	DebuggingKey( );

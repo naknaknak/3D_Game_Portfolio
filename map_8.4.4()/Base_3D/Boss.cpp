@@ -190,7 +190,7 @@ void Boss::ProcessState()
 		{
 			float tick = GameManager::GetTick();
 			animController->SetTrackSpeed(0, 0.0f);
-			
+			isDead = true;
 			currentAnimationTime += tick;
 			if (pos.y > -10.0)
 			{
@@ -199,7 +199,7 @@ void Boss::ProcessState()
 			}
 			else
 			{
-				isDead = true;
+			
 			}
 		}
 		break;

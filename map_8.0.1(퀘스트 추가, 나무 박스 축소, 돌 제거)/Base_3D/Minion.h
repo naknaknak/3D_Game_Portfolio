@@ -10,7 +10,7 @@ public:
 	virtual void Initialize(char* path, char* filename) override;
 	
 	virtual void ChangeCharacterState(CharacterState state);
-	
+	virtual float GetMaxHP()override { return 100.0f; }
 
 protected:
 	void ProcessState() override;

@@ -111,6 +111,16 @@ void GameState_HeightMap::Initialize( )
 	monster->SetPlayer(lilith);
 	monsters.push_back(monster);
 	
+	monster = nullptr;
+	monster = new Boss();
+	monster->SetInitialPosition(D3DXVECTOR3(70, 32, -130));
+	monster->Initialize("Brick/", "Brick.x");
+	monster->SetMonsters(monsters);
+	monster->SetHeightMap(heightMap);
+	monster->ChangeCharacterState(CharacterState::CHARACTER_IDLE);
+	monster->SetPlayer(lilith);
+	monsters.push_back(monster);
+
 	lilith->SetMonsters(monsters);
 
 }

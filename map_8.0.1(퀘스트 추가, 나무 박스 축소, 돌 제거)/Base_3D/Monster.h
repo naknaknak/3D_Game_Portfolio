@@ -10,7 +10,7 @@ public:
 	inline void SetPlayer(SkinnedCharacter* inputPlayer) { player = inputPlayer; }
 	inline void SetInitialPosition(D3DXVECTOR3 inputInitialPosition) { initialPositon = inputInitialPosition; }
 	inline void SetMonsters(std::vector<Monster*> inputMonsters) { monsters = inputMonsters; }
-	
+	virtual float GetMaxHP() = 0;
 
 protected:
 	virtual void ProcessState()=0;

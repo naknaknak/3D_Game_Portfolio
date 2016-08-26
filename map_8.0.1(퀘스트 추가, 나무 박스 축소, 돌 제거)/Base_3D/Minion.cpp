@@ -189,7 +189,7 @@ void Minion::ProcessState()
 		float tick = (float)GameManager::GetTick();
 
 		currentAnimationTime += tick;
-		
+		animController->SetTrackSpeed(0, 0.2f);
 		if (currentAnimationTime >= selectedAnimationLength*5.0f)
 		{
 			isHit = false;
@@ -258,11 +258,15 @@ void Minion::ProcessState()
 	{
 		float tick=GameManager::GetTick();
 		animController->SetTrackSpeed(0, 0.0f);
-		isDead = true;
+		
 		currentAnimationTime += tick;
 		if (pos.y > -10.0)
 		{
 			pos.y -= tick;
+		}
+		else
+		{
+			isDead = true;
 		}
 	}
 		break;
@@ -285,7 +289,14 @@ bool Minion::CollisionMonsters(D3DXVECTOR3* direction)
 			if (collision)
 			{
 				*direction = boundingSphere.center - (*iter)->GetBoundingSphereValue().center;
-				break;
+				if (D3DXVec3LengthSq(direction) > 0.3)
+				{
+					break;
+				}
+				else
+				{
+					continue;
+				}
 			}
 
 

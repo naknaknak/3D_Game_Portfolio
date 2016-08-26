@@ -150,7 +150,7 @@ void HeightMap::Initialize(char* mapFileName, char* textureFileName)
 	}
 	if (m_pQuadTree == nullptr)
 	{
-		m_fLODRatio = 0.03f;
+		m_fLODRatio = 0.1f;
 		m_pQuadTree = new QuadTree(mapSize, mapSize); 	// 텍스쳐 파일의 크기에 맞춰서 쿼드트리를 생성한다.
 		m_pQuadTree->Build(&vertex[0]);
 	}

@@ -138,7 +138,7 @@ void Quest::SetQuest(int questType)
 		}
 		case QUEST_MIDDLE:
 		{
-			strQuest = "퀘스트 갱신! \n\n염소들이 탈출한 원흉을 나타났다! \n\n덩치 큰 흰 염소를 혼내주자!!!";
+			strQuest = "퀘스트 갱신! \n\n염소들이 탈출한 원흉이 나타났다! \n";
 			strTitle = "퀘스트 : 염소 탈출의 원흉";
 			strlist_Body = "Brick 처치 : ";
 			break;

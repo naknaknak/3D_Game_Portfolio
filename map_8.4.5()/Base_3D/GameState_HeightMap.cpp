@@ -244,20 +244,20 @@ void GameState_HeightMap::Update( )
 
 	}
 
-	if (count_dead == monsters.size() - 1 && !selectOK[QUEST_END])
+	if (count_dead == monsters.size() - 1 && !selectOK[QUEST_MIDDLE])
 	{
 
 
-		quest->SetQuest(2);
+		quest->SetQuest(1);
 		quest->ShowQuest(true);
-		quest->AcceptQuest(selectOK[QUEST_END]);
+		quest->AcceptQuest(selectOK[QUEST_MIDDLE]);
 	}
 	if (statusBar)statusBar->Update();
 	if (quest)	quest->Update();
-	if (count_dead == monsters.size() && selectOK[QUEST_END] )
+	if (count_dead == monsters.size() && selectOK[QUEST_MIDDLE] )
 	{
 		quest->ShowCompleteOK(true);
-		selectOK[QUEST_END] = false;
+		selectOK[QUEST_MIDDLE] = false;
 	}
 
 	DebuggingKey( );

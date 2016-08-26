@@ -190,15 +190,17 @@ void GameState_HeightMap::Update( )
 			quest->ShowQuest(true);
 			quest->AcceptQuest(selectOK[QUEST_START]);
 		}
-		count_dead = monsters.size( ) - count_dead;
+		count_dead = monsters.size( ) - count_dead-1;
 		quest->SetCount_QuestListShow(count_dead);
 
 	}
 	count_dead = 0;
-	for (auto iter = monsters.begin( ); iter != monsters.end( ); iter++)
+	int monsterHPIndex = 0;
+	int index = 0;
+	float mintoPlayer = FLT_MAX;
+	for (auto iter = monsters.begin( ); iter != monsters.end( ); iter++,index++)
 	{
-		hppp = (*iter)->GetHP( );
-		statusBar->GetMonsterHP(hppp, (*iter)->GetMaxHP());
+		
 
 		(*iter)->Update( );
 		if ((*iter)->GetIsDead( ))
@@ -209,10 +211,31 @@ void GameState_HeightMap::Update( )
 		{
 			count_dead = monsters.size( );
 		}
-	}
+		float toPlayer = D3DXVec3LengthSq(&(lilith->GetBoundingSphereValue().center - (*iter)->GetBoundingSphereValue().center));
+		if (toPlayer < mintoPlayer)
+		{
+			mintoPlayer = toPlayer;
+			monsterHPIndex = index;
+		}
 
-	if (statusBar)statusBar->Update( );
-	if (quest)	quest->Update( );
+	}
+	hppp = monsters[monsterHPIndex]->GetHP();
+	statusBar->GetMonsterHP(hppp, monsters[monsterHPIndex]->GetMaxHP());
+
+	if (count_dead == monsters.size() - 1 && !selectOK[QUEST_END])
+	{
+
+
+		quest->SetQuest(2);
+		quest->ShowQuest(true);
+		quest->AcceptQuest(selectOK[QUEST_END]);
+	}
+	if (statusBar)statusBar->Update();
+	if (quest)	quest->Update();
+	if (count_dead == monsters.size() && selectOK[QUEST_END] && selectOK[QUEST_START])
+	{
+		quest->ShowCompleteOK(true);
+	}
 
 	DebuggingKey( );
 }

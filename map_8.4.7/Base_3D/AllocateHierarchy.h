@@ -1,5 +1,9 @@
 #pragma once
 
+/*스켈레톤 애니메이션을 만들기 위해 사용
+//반 이상은 DX쪽에서 받아온 코드
+*/
+
 struct Bone : public D3DXFRAME
 {
 	D3DXMATRIXA16 CombinedTransformationMatrix;	// 영향 누적용

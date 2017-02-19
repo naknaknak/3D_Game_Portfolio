@@ -3,6 +3,13 @@
 #include "Tree.h"
 #include "Minion.h"
 #include "Boss.h"
+/*
+//플레이어만 가능한 것이 분명 있을 터
+//일단 지금은 조작, 행동을 나누기 위해 만들어둠.
+//플레이어와 보스가 스킬까지 넣는 게 목표.
+*/
+
+//회피방향으로 애니메이션을 나누기 위해 사용
 enum DodgeDirection
 {
 	DODGE_FORWARD = 0,
@@ -11,6 +18,7 @@ enum DodgeDirection
 	DODGE_RIGHT
 
 };
+
 class Player :
 	public SkinnedCharacter
 {
@@ -76,7 +84,7 @@ protected:
 	void ProcessState(CharacterState state);
 	
 
-	//충돌처리용 벡터
+	//충돌처리용 다른 오브젝트들의 배열
 	std::vector<Monster*> monsters;
 	std::vector<Tree*> trees;
 
